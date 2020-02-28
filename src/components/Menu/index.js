@@ -1,13 +1,37 @@
 import React from 'react';
+import { ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
+
+import DashboardIcon from '@material-ui/icons/Dashboard';
+import ApartmentIcon from '@material-ui/icons/Apartment';
+
 import { Link } from 'react-router-dom';
 
-// import { Container } from './styles';
+import './styles.css';
+
+const menuItens = [
+  {
+    route: '/',
+    icon: <DashboardIcon />,
+    text: 'Home',
+  },
+  {
+    route: '/orgao',
+    icon: <ApartmentIcon />,
+    text: 'Órgãos',
+  },
+];
 
 export default function Menu() {
   return (
     <>
-      <Link to="/">Home</Link>
-      <Link to="/orgao">Órgãos/Unidades</Link>
+      {menuItens.map(menu => (
+        <ListItem button key={menu.text}>
+          <ListItemIcon>{menu.icon}</ListItemIcon>
+          <Link to={menu.route}>
+            <ListItemText primary={menu.text} />
+          </Link>
+        </ListItem>
+      ))}
     </>
   );
 }

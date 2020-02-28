@@ -7,12 +7,10 @@ import Main from './pages/Main';
 
 export default function Routes() {
   return (
-    <BrowserRouter>
-      <Switch>
-        <Route path="/" exact component={Main} />
+    <Switch>
+      <Route path="/" exact component={Main} />
 
-        <Route path="/orgao" component={Company} />
-      </Switch>
-    </BrowserRouter>
+      <Route path="/orgao" component={Company} />
+    </Switch>
   );
 }

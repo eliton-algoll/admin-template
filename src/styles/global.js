@@ -36,4 +36,15 @@ export default createGlobalStyle`
     cursor: pointer;
   }
 
+  a{
+    text-decoration:none;
+  }
+  a:hover{
+    color:inherit;
+  }
+
+  a:visited{
+    color:inherit;
+  }
+
 `;
