@@ -5,7 +5,7 @@ export default createGlobalStyle`
 @import url('https://fonts.googleapis.com/css?family=Roboto:400,500,700,900&display=swap');
 
   * {
-    margin: 0 ;
+    margin: 0;
     padding: 0;
     outline: 0;
     box-sizing: border-box;

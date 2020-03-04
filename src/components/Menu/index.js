@@ -3,6 +3,7 @@ import { ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
 
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import ApartmentIcon from '@material-ui/icons/Apartment';
+import ListIcon from '@material-ui/icons/ListAlt';
 
 import { Link } from 'react-router-dom';
 
@@ -18,6 +19,11 @@ const menuItens = [
     route: '/orgao',
     icon: <ApartmentIcon />,
     text: 'Órgãos',
+  },
+  {
+    route: '/protocolo',
+    icon: <ListIcon />,
+    text: 'Protocolo',
   },
 ];
 
