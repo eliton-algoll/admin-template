@@ -1,37 +1,85 @@
 import React, { useState, useEffect } from 'react';
 import { parseISO, format } from 'date-fns';
 import pt from 'date-fns/locale/pt';
-import { makeStyles } from '@material-ui/core/styles';
-import { Modal, Fade, Backdrop } from '@material-ui/core';
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import MuiDialogTitle from '@material-ui/core/DialogTitle';
+import MuiDialogContent from '@material-ui/core/DialogContent';
+import MuiDialogActions from '@material-ui/core/DialogActions';
+import Typography from '@material-ui/core/Typography';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import { withStyles } from '@material-ui/core/styles';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
 
 import TableStyled from '../../utils/Table';
 import api from '../../services/api';
 
-const useStyles = makeStyles(theme => ({
-  modal: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
+// formulários
+import ProtocoloForm from './components/forms/ProtocoloForm';
+
+const styles = theme => ({
+  root: {
+    margin: 0,
+    padding: theme.spacing(2),
   },
-  paper: {
-    backgroundColor: theme.palette.background.paper,
-    borderRadius: '8px',
-    boxShadow: theme.shadows[5],
+  closeButton: {
+    position: 'absolute',
+    right: theme.spacing(1),
+    top: theme.spacing(1),
+    color: theme.palette.grey[500],
   },
-  titleModal: {
-    borderBottom: '1px solid #e5e5e5',
-    fontSize: '18px',
-    fontWeight: '400',
-    padding: '10px 10px',
+  subtitle: {
+    fontSize: '10px',
+    color: 'red',
   },
-  modalBody: {
-    padding: '10px 10px',
+  button: {
+    background: '#3b9eff',
   },
-}));
+});
+
+const DialogTitle = withStyles(styles)(props => {
+  const { children, classes, onClose } = props;
+  return (
+    <MuiDialogTitle disableTypography className={classes.root}>
+      <Typography variant="h6">{children}</Typography>
+      <small />
+      {onClose ? (
+        <IconButton
+          aria-label="close"
+          className={classes.closeButton}
+          onClick={onClose}
+        >
+          <CloseIcon />
+        </IconButton>
+      ) : null}
+    </MuiDialogTitle>
+  );
+});
+const DialogContent = withStyles(theme => ({
+  root: {
+    padding: theme.spacing(2),
+  },
+}))(MuiDialogContent);
+
+const DialogActions = withStyles(theme => ({
+  root: {
+    margin: 0,
+    padding: theme.spacing(1),
+  },
+}))(MuiDialogActions);
+
+const ButtonSubmit = withStyles(styles)(props => {
+  const { children, classes } = props;
+  return (
+    <Button variant="contained" className={classes.button} color="primary">
+      {children}
+    </Button>
+  );
+});
 
 export default function Protocolo() {
   const [protocolos, setProtocolos] = useState([]);
-  const classes = useStyles();
   const [open, setOpen] = useState(false);
 
   const handleOpen = () => {
@@ -99,7 +147,7 @@ export default function Protocolo() {
       tooltip: 'Gerar protocolo',
       isFreeAction: true,
       iconProps: { color: 'primary', fontSize: 'large' },
-      onClick: event => setOpen(true),
+      onClick: () => handleOpen(),
     },
   ];
 
@@ -112,27 +160,28 @@ export default function Protocolo() {
         title="Protocolos cadastrados"
       />
 
-      <Modal
-        aria-labelledby="transition-modal-title"
-        aria-describedby="transition-modal-description"
-        className={classes.modal}
+      <Dialog
         open={open}
-        onClose={handleClose}
-        closeAfterTransition
-        BackdropComponent={Backdrop}
-        BackdropProps={{
-          timeout: 500,
-        }}
+        aria-labelledby="form-dialog-title"
+        maxWidth="lg"
+        disableBackdropClick
       >
-        <Fade in={open}>
-          <div className={classes.paper}>
-            <div className={classes.titleModal}>Gerar Protocolo</div>
-            <div className={classes.modalBody}>
-              react-transition-group animates me.sd asd asd asd asd asd
-            </div>
-          </div>
-        </Fade>
-      </Modal>
+        <DialogTitle id="customized-dialog-title" onClose={handleClose}>
+          Gerar Protocolo
+        </DialogTitle>
+        <DialogContent dividers>
+          <DialogContentText>
+            Todos os campos com (*) são obrigatórios.
+          </DialogContentText>
+          <ProtocoloForm />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} variant="contained">
+            Cancelar
+          </Button>
+          <ButtonSubmit onClick={handleClose}>Gerar Protocolo</ButtonSubmit>
+        </DialogActions>
+      </Dialog>
     </>
   );
 }
