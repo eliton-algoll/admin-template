@@ -15,14 +15,17 @@ const useStyles = makeStyles(theme => ({
   },
   paper: {
     backgroundColor: theme.palette.background.paper,
-    border: '2px solid #000',
+    borderRadius: '8px',
     boxShadow: theme.shadows[5],
-    padding: theme.spacing(2, 4, 3),
   },
   titleModal: {
     borderBottom: '1px solid #e5e5e5',
     fontSize: '18px',
     fontWeight: '400',
+    padding: '10px 10px',
+  },
+  modalBody: {
+    padding: '10px 10px',
   },
 }));
 
@@ -123,12 +126,10 @@ export default function Protocolo() {
       >
         <Fade in={open}>
           <div className={classes.paper}>
-            <h2 id="transition-modal-title" className={classes.titleModal}>
-              Transition modal
-            </h2>
-            <p id="transition-modal-description">
-              react-transition-group animates me.
-            </p>
+            <div className={classes.titleModal}>Gerar Protocolo</div>
+            <div className={classes.modalBody}>
+              react-transition-group animates me.sd asd asd asd asd asd
+            </div>
           </div>
         </Fade>
       </Modal>
