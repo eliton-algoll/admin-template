@@ -4,7 +4,7 @@ import { darken } from 'polished';
 
 export const Content = styled.div`
   width: 100%;
-  max-width: 800px;
+
   text-align: center;
   display: flex;
 
@@ -12,23 +12,25 @@ export const Content = styled.div`
     display: flex;
     margin-top: 10px;
     width: 100%;
-
     flex-wrap: wrap;
   }
 
   .imgIdentificacao {
-    width: 150px;
+    width: 250px;
   }
 
   .row-1 {
     display: flex;
-    align-items: center;
-    justify-content: center;
+    width: 100%;
+    justify-content: space-between;
   }
   .row-idt {
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
+  }
+
+  .MuiFormControl-marginDense {
+    margin-right: 10px;
   }
 `;
 
