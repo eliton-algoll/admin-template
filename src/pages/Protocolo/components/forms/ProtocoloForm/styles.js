@@ -1,11 +1,8 @@
 import styled from 'styled-components';
 
-import { darken } from 'polished';
-
 export const Content = styled.div`
   width: 100%;
 
-  text-align: center;
   display: flex;
 
   form {
@@ -24,28 +21,42 @@ export const Content = styled.div`
     width: 100%;
     justify-content: space-between;
   }
+
   .row-idt {
     display: flex;
-    flex-direction: row;
+    justify-content: space-between;
+  }
+  .row-nomes {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .row-2 {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .row-identificacao {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .row-dados-protocolo {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    justify-content: space-between;
+
+    .dados-protocolo-1,
+    .dados-protocolo-2 {
+      display: flex;
+      width: 100%;
+      justify-content: space-between;
+    }
   }
 
   .MuiFormControl-marginDense {
     margin-right: 10px;
-  }
-`;
-
-export const Button = styled.button`
-  margin: 5px 0 0;
-  height: 44px;
-  background: #3b9eff;
-  font-weight: bold;
-  color: #fff;
-  border: 0;
-  border-radius: 4px;
-  font-size: 16px;
-  transition: background 0.2s;
-
-  &:hover {
-    background: ${darken(0.03, '#3b9eff')};
   }
 `;

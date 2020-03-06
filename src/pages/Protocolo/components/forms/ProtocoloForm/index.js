@@ -1,11 +1,15 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import PropTypes from 'prop-types';
 import { Form } from '@rocketseat/unform';
 
+import { format } from 'date-fns';
+
 import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
 import { Content } from './styles';
+
+import api from '../../../../../services/api';
 
 const motivosIdt = [
   {
@@ -43,6 +47,20 @@ const motivosIdt = [
 ];
 
 function ProtocoloForm({ onSubmit }) {
+  const [pessoa, setPessoa] = useState({});
+
+  async function handleChangeIdt(e) {
+    const idt = e.target.value;
+
+    if (idt) {
+      const response = await api.get(
+        `/identificacao/protocolo/findDadosmilitar/${idt}`
+      );
+
+      setPessoa(response.data.dados);
+    }
+  }
+
   return (
     <Content>
       <Form onSubmit={onSubmit}>
@@ -55,6 +73,7 @@ function ProtocoloForm({ onSubmit }) {
                 margin="dense"
                 id="idt"
                 name="idt"
+                onBlur={handleChangeIdt}
                 label="Identidade *"
                 type="text"
                 fullWidth
@@ -66,6 +85,7 @@ function ProtocoloForm({ onSubmit }) {
                 margin="dense"
                 id="cpf"
                 name="cpf"
+                value={pessoa.cpf}
                 label="CPF *"
                 type="text"
                 fullWidth
@@ -115,6 +135,31 @@ function ProtocoloForm({ onSubmit }) {
                 fullWidth
               />
             </div>
+            <div className="row-identificacao">
+              <TextField
+                autoFocus
+                variant="outlined"
+                margin="dense"
+                id="omSigla"
+                name="omSigla"
+                label="Órgão de identificação"
+                type="text"
+                fullWidth
+              />
+
+              <TextField
+                autoFocus
+                variant="outlined"
+                margin="dense"
+                id="dtExpedicao"
+                InputProps={{
+                  readOnly: true,
+                }}
+                label="Data"
+                defaultValue={format(new Date(), 'dd/MM/y')}
+                type="text"
+              />
+            </div>
           </div>
           <div className="row-img">
             <img
@@ -124,42 +169,87 @@ function ProtocoloForm({ onSubmit }) {
           </div>
         </div>
 
-        <div>
-          <TextField
-            autoFocus
-            variant="outlined"
-            margin="dense"
-            id="omSigla"
-            name="omSigla"
-            label="Órgão de identificação"
-            type="text"
-            fullWidth
-          />
+        <div className="row-dados-protocolo">
+          <div className="dados-protocolo-1">
+            <TextField
+              select
+              variant="outlined"
+              margin="dense"
+              id="motivoIdt"
+              label="Motivo da identificação"
+              fullWidth
+            >
+              {motivosIdt.map(option => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
+                </MenuItem>
+              ))}
+            </TextField>
 
-          <TextField
-            autoFocus
-            variant="outlined"
-            margin="dense"
-            id="dtExpedicao"
-            name="dtExpedicao"
-            label="Data de identificação"
-            type="text"
-            fullWidth
-          />
-
-          <TextField
-            select
-            variant="outlined"
-            id="motivoIdt"
-            label="Motivo da identificação"
-            fullWidth
-          >
-            {motivosIdt.map(option => (
-              <MenuItem key={option.value} value={option.value}>
-                {option.label}
+            <TextField
+              select
+              variant="outlined"
+              margin="dense"
+              id="tipoDoc"
+              label="Tipo de documento"
+              fullWidth
+            >
+              <MenuItem value="1">Cartão de CB/SD</MenuItem>
+              <MenuItem value="2">
+                Carteira de Identificação Militar(CIM)
               </MenuItem>
-            ))}
-          </TextField>
+              <MenuItem value="3">Carteira de Identidade(CIMPM)</MenuItem>
+            </TextField>
+
+            <TextField
+              select
+              variant="outlined"
+              margin="dense"
+              id="codTipoPes"
+              label="Tipo de pessoa"
+              fullWidth
+            >
+              <MenuItem value="4">Civil</MenuItem>
+              <MenuItem value="5">Dependente</MenuItem>
+              <MenuItem value="7">Pensionista</MenuItem>
+              <MenuItem value="0">Militar do Exército</MenuItem>
+            </TextField>
+          </div>
+          <div className="dados-protocolo-2">
+            <TextField
+              autoFocus
+              variant="outlined"
+              margin="dense"
+              id="obs"
+              name="obs"
+              label="Observação do protocolo"
+              type="text"
+              multiline
+              fullWidth
+            />
+
+            <TextField
+              autoFocus
+              variant="outlined"
+              margin="dense"
+              id="fone"
+              name="fone"
+              label="Telefone"
+              type="text"
+              fullWidth
+            />
+            <TextField
+              autoFocus
+              variant="outlined"
+              margin="dense"
+              id="email"
+              name="email"
+              label="Email"
+              type="email"
+              multiline
+              fullWidth
+            />
+          </div>
         </div>
       </Form>
     </Content>

@@ -7,7 +7,6 @@ import MuiDialogTitle from '@material-ui/core/DialogTitle';
 import MuiDialogContent from '@material-ui/core/DialogContent';
 import MuiDialogActions from '@material-ui/core/DialogActions';
 import Typography from '@material-ui/core/Typography';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import { withStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
@@ -163,16 +162,16 @@ export default function Protocolo() {
       <Dialog
         open={open}
         aria-labelledby="form-dialog-title"
-        maxWidth="lg"
+        maxWidth="md"
         disableBackdropClick
       >
         <DialogTitle id="customized-dialog-title" onClose={handleClose}>
-          Gerar Protocolo
+          Gerar Protocolo{' '}
+          <small style={{ fontSize: '10px', color: 'red' }}>
+            Todos os campos com (*) são obrigatórios.
+          </small>
         </DialogTitle>
         <DialogContent dividers>
-          <DialogContentText>
-            Todos os campos com (*) são obrigatórios.
-          </DialogContentText>
           <ProtocoloForm />
         </DialogContent>
         <DialogActions>
