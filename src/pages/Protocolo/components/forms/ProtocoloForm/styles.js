@@ -13,7 +13,9 @@ export const Content = styled.div`
   }
 
   .imgIdentificacao {
-    width: 250px;
+    width: 150px;
+    height: 200px;
+    margin-top: -40px;
   }
 
   .row-1 {
@@ -47,6 +49,7 @@ export const Content = styled.div`
     width: 100%;
     flex-direction: column;
     justify-content: space-between;
+    align-items: flex-end;
 
     .dados-protocolo-1,
     .dados-protocolo-2 {

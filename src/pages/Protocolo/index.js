@@ -1,93 +1,100 @@
 import React, { useState, useEffect } from 'react';
 import { parseISO, format } from 'date-fns';
+import { connect } from 'react-redux';
 import pt from 'date-fns/locale/pt';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import MuiDialogTitle from '@material-ui/core/DialogTitle';
-import MuiDialogContent from '@material-ui/core/DialogContent';
-import MuiDialogActions from '@material-ui/core/DialogActions';
-import Typography from '@material-ui/core/Typography';
-import { withStyles } from '@material-ui/core/styles';
-import IconButton from '@material-ui/core/IconButton';
-import CloseIcon from '@material-ui/icons/Close';
 
-import TableStyled from '../../utils/Table';
-import api from '../../services/api';
+import TableStyled from '~/utils/Table';
+import api from '~/services/api';
+
+import DialogForm from '~/helpers/forms/DialogForm';
 
 // formulários
 import ProtocoloForm from './components/forms/ProtocoloForm';
+import BuscaForm from './components/forms/BuscaForm';
 
-const styles = theme => ({
-  root: {
-    margin: 0,
-    padding: theme.spacing(2),
-  },
-  closeButton: {
-    position: 'absolute',
-    right: theme.spacing(1),
-    top: theme.spacing(1),
-    color: theme.palette.grey[500],
-  },
-  subtitle: {
-    fontSize: '10px',
-    color: 'red',
-  },
-  button: {
-    background: '#3b9eff',
-  },
-});
-
-const DialogTitle = withStyles(styles)(props => {
-  const { children, classes, onClose } = props;
-  return (
-    <MuiDialogTitle disableTypography className={classes.root}>
-      <Typography variant="h6">{children}</Typography>
-      <small />
-      {onClose ? (
-        <IconButton
-          aria-label="close"
-          className={classes.closeButton}
-          onClick={onClose}
-        >
-          <CloseIcon />
-        </IconButton>
-      ) : null}
-    </MuiDialogTitle>
-  );
-});
-const DialogContent = withStyles(theme => ({
-  root: {
-    padding: theme.spacing(2),
-  },
-}))(MuiDialogContent);
-
-const DialogActions = withStyles(theme => ({
-  root: {
-    margin: 0,
-    padding: theme.spacing(1),
-  },
-}))(MuiDialogActions);
-
-const ButtonSubmit = withStyles(styles)(props => {
-  const { children, classes } = props;
-  return (
-    <Button variant="contained" className={classes.button} color="primary">
-      {children}
-    </Button>
-  );
-});
-
-export default function Protocolo() {
+function Protocolo(props) {
   const [protocolos, setProtocolos] = useState([]);
   const [open, setOpen] = useState(false);
+  const [openIdt, setOpenIdt] = useState(false);
+  const [basePessoa, setBasePessoa] = useState({});
 
   const handleOpen = () => {
     setOpen(true);
   };
 
+  const handleOpenIdt = () => {
+    setOpenIdt(true);
+  };
+
   const handleClose = () => {
     setOpen(false);
   };
+
+  const handleCloseIdt = () => {
+    setOpenIdt(false);
+  };
+
+  async function handleSubmit(data) {
+    const { dispatch } = props;
+
+    const protocoloExist = await api.get(
+      `/identificacao/protocolo/verificaidtprotocolo/${data.idt}`
+    );
+
+    if (protocoloExist.data.length !== 0) {
+      alert(protocoloExist.data.msgm);
+
+      return;
+    }
+
+    const response = await api.get(
+      `/identificacao/protocolo/findDadosmilitar/${data.idt}`
+    );
+
+    setBasePessoa(response.data.dados);
+
+    dispatch({
+      type: 'ADD_DADOS_PESSOA',
+      basePessoa: response.data.dados,
+    });
+
+    handleCloseIdt();
+    handleOpen();
+  }
+
+  async function handleSubmitGeraProtocolo(data) {
+    const { dispatch } = props;
+
+    const user = {
+      usuario: '1107205278',
+      omNumero: '01',
+      om: 2,
+      rm: '11',
+    };
+
+    const dataEnvia = { ...data, ...user };
+
+    console.tron.log(dataEnvia);
+
+    const response = await api.post(
+      `/identificacao/protocolo/gerarapi`,
+      dataEnvia
+    );
+
+    console.tron.log(response.data);
+    console.tron.log(response.data.status);
+
+    if (response.data.status === 200) {
+      dispatch({
+        type: 'ADD_PROTOCOLO',
+        protocolo: response.data.protocolo,
+      });
+
+      setProtocolos([...protocolos, response.data.protocolo]);
+
+      handleClose();
+    }
+  }
 
   useEffect(() => {
     async function loadProtocolos() {
@@ -97,7 +104,7 @@ export default function Protocolo() {
     }
 
     loadProtocolos();
-  }, []);
+  }, [protocolos]);
 
   const columns = [
     {
@@ -146,7 +153,7 @@ export default function Protocolo() {
       tooltip: 'Gerar protocolo',
       isFreeAction: true,
       iconProps: { color: 'primary', fontSize: 'large' },
-      onClick: () => handleOpen(),
+      onClick: () => handleOpenIdt(),
     },
   ];
 
@@ -159,28 +166,26 @@ export default function Protocolo() {
         title="Protocolos cadastrados"
       />
 
-      <Dialog
-        open={open}
-        aria-labelledby="form-dialog-title"
-        maxWidth="md"
-        disableBackdropClick
+      <DialogForm
+        handleClose={handleClose}
+        handleOpen={open}
+        title="Gerar Protocolo"
+        submitButton="Gerar Protocolo"
       >
-        <DialogTitle id="customized-dialog-title" onClose={handleClose}>
-          Gerar Protocolo{' '}
-          <small style={{ fontSize: '10px', color: 'red' }}>
-            Todos os campos com (*) são obrigatórios.
-          </small>
-        </DialogTitle>
-        <DialogContent dividers>
-          <ProtocoloForm />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} variant="contained">
-            Cancelar
-          </Button>
-          <ButtonSubmit onClick={handleClose}>Gerar Protocolo</ButtonSubmit>
-        </DialogActions>
-      </Dialog>
+        <ProtocoloForm handleSubmit={handleSubmitGeraProtocolo} />
+      </DialogForm>
+
+      <DialogForm
+        handleClose={handleCloseIdt}
+        handleOpen={openIdt}
+        title="Gerar Protocolo"
+        submitButton="Pesquisar"
+        form="buscaForm"
+      >
+        <BuscaForm handleSubmit={handleSubmit} />
+      </DialogForm>
     </>
   );
 }
+
+export default connect()(Protocolo);
