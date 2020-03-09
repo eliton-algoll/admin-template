@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { parseISO, format } from 'date-fns';
 import { connect } from 'react-redux';
 import pt from 'date-fns/locale/pt';
+import Layout from '~/template/Layout';
 
 import TableStyled from '~/utils/Table';
 import api from '~/services/api';
@@ -74,15 +75,10 @@ function Protocolo(props) {
 
     const dataEnvia = { ...data, ...user };
 
-    console.tron.log(dataEnvia);
-
     const response = await api.post(
       `/identificacao/protocolo/gerarapi`,
       dataEnvia
     );
-
-    console.tron.log(response.data);
-    console.tron.log(response.data.status);
 
     if (response.data.status === 200) {
       dispatch({
@@ -104,7 +100,7 @@ function Protocolo(props) {
     }
 
     loadProtocolos();
-  }, [protocolos]);
+  }, []);
 
   const columns = [
     {
@@ -158,7 +154,7 @@ function Protocolo(props) {
   ];
 
   return (
-    <>
+    <Layout>
       <TableStyled
         data={protocolos}
         columns={columns}
@@ -184,7 +180,7 @@ function Protocolo(props) {
       >
         <BuscaForm handleSubmit={handleSubmit} />
       </DialogForm>
-    </>
+    </Layout>
   );
 }
 

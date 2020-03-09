@@ -2,12 +2,10 @@ import React from 'react';
 
 import { Typography, Box } from '@material-ui/core';
 import Link from '@material-ui/core/Link';
+import PropTypes from 'prop-types';
 
 import { ContentStyled, Contents } from './styles';
 import Breadcrumb from '../Breadcrumb';
-
-// importando as rotas
-import Routes from '../../../routes';
 
 function Copyright() {
   return (
@@ -22,14 +20,12 @@ function Copyright() {
   );
 }
 
-export default function Content() {
+function Content({ children }) {
   return (
     <>
       <ContentStyled>
         <Breadcrumb />
-        <Contents>
-          <Routes />
-        </Contents>
+        <Contents>{children}</Contents>
         <Box pt={4}>
           <Copyright />
         </Box>
@@ -37,3 +33,9 @@ export default function Content() {
     </>
   );
 }
+
+Content.propTypes = {
+  children: PropTypes.element.isRequired,
+};
+
+export default Content;

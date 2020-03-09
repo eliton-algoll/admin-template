@@ -2,9 +2,10 @@ import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import GlobalStyle from './styles/global';
-import Layout from './template/Layout';
 
 import './config/ReactotronConfig';
+// importando as rotas
+import Routes from '~/routes';
 
 import store from '~/store';
 
@@ -13,7 +14,7 @@ function App() {
     <Provider store={store}>
       <GlobalStyle />
       <BrowserRouter>
-        <Layout />
+        <Routes />
       </BrowserRouter>
     </Provider>
   );

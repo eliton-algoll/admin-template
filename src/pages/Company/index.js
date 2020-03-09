@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import TableStyled from '../../utils/Table';
+import Layout from '~/template/Layout';
 import api from '../../services/api';
 
 import './styles.css';
@@ -67,11 +68,13 @@ export default function Company() {
   ];
 
   return (
-    <TableStyled
-      data={companies}
-      columns={columns}
-      actions={actions}
-      title="Om's cadastradas"
-    />
+    <Layout>
+      <TableStyled
+        data={companies}
+        columns={columns}
+        actions={actions}
+        title="Om's cadastradas"
+      />
+    </Layout>
   );
 }
