@@ -1,11 +1,12 @@
 import React from 'react';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, Router } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import GlobalStyle from './styles/global';
 
 import './config/ReactotronConfig';
 // importando as rotas
 import Routes from '~/routes';
+import history from '~/services/history';
 
 import store from '~/store';
 
@@ -14,7 +15,9 @@ function App() {
     <Provider store={store}>
       <GlobalStyle />
       <BrowserRouter>
-        <Routes />
+        <Router history={history}>
+          <Routes />
+        </Router>
       </BrowserRouter>
     </Provider>
   );
