@@ -1,11 +1,13 @@
 import React from 'react';
 import { MdArrowDropDown } from 'react-icons/md';
-import imageLobo from '../../../assets/images/lobo.jpg';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+
 import logo from '../../../assets/images/logodsm.png';
 
 import { HeaderStyled } from './styles';
 
-export default function Header() {
+function Header({ user }) {
   return (
     <>
       <HeaderStyled>
@@ -15,11 +17,22 @@ export default function Header() {
           <small> Sistema de Identificação do Pessoal do Exército</small>
         </div>
         <div className="user-avatar">
-          <span>Fulano de tal</span>
-          <img src={imageLobo} alt="avatar" />
+          <span>{`${user ? user.postoGrad : null} ${
+            user ? user.nomeGuerra : null
+          }`}</span>
+          <img
+            src={`data:image/png;base64,${user ? user.foto : null}`}
+            alt="avatar"
+          />
           <MdArrowDropDown />
         </div>
       </HeaderStyled>
     </>
   );
 }
+
+Header.propTypes = {
+  user: PropTypes.objectOf.isRequired,
+};
+
+export default connect(state => ({ user: state.auth.user }))(Header);

@@ -1,16 +1,17 @@
 import React, { useRef } from 'react';
+
+import { useDispatch } from 'react-redux';
 import * as Yup from 'yup';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { Form } from '@unform/web';
 import { TextField } from 'unform-material-ui';
 import Button from '@material-ui/core/Button';
 import { Container } from './styles';
+import { loginRequest } from '~/store/modules/auth/actions';
 
 import history from '~/services/history';
 
 import logoDsm from '~/assets/images/logodsm.png';
-
-import api from '~/services/api';
 
 const schema = Yup.object().shape({
   identidade: Yup.string().required('A identidade é obrigatória'),
@@ -18,6 +19,7 @@ const schema = Yup.object().shape({
 });
 
 export default function Login() {
+  const dispatch = useDispatch();
   const formRef = useRef(null);
 
   function handleChange(event) {
@@ -43,14 +45,17 @@ export default function Login() {
       return;
     }
 
+    dispatch(loginRequest(data.identidade, data.senha));
+
+    /*
     const response = await api.post('/loginapi', data);
 
     if (response.data.error) {
       alert(response.data.error);
       return;
     }
-
-    history.push('/');
+*/
+    history.push('/login');
   }
   return (
     <>

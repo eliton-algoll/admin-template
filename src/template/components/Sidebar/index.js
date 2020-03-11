@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Side } from './styles';
 
-import Menu from '../../../components/Menu';
+import Menu from '~/pages/components/Menu';
 
 export default function Sidebar() {
   return (

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { parseISO, format } from 'date-fns';
 import { connect } from 'react-redux';
 import pt from 'date-fns/locale/pt';
+import history from '~/services/history';
 import Layout from '~/template/Layout';
 
 import TableStyled from '~/utils/Table';
@@ -92,6 +93,10 @@ function Protocolo(props) {
     }
   }
 
+  function handleClick(codProtocolo) {
+    history.push(`identificacao/${codProtocolo}`);
+  }
+
   useEffect(() => {
     async function loadProtocolos() {
       const response = await api.get('/identificacao/protocolo');
@@ -143,6 +148,7 @@ function Protocolo(props) {
     {
       icon: 'perm_identity',
       tooltip: 'Iniciar Identificação',
+      onClick: (event, rowData) => handleClick(rowData.codProtocolo),
     },
     {
       icon: 'add_box',
