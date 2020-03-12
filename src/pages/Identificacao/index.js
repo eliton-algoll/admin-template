@@ -5,17 +5,20 @@ import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import { makeStyles } from '@material-ui/core/styles';
-import PhoneIcon from '@material-ui/icons/Phone';
-import FavoriteIcon from '@material-ui/icons/Favorite';
+import FingerPrintIcon from '@material-ui/icons/Fingerprint';
+import PersonOutlineIcon from '@material-ui/icons/PersonOutline';
+import AssignmentIcon from '@material-ui/icons/Assignment';
 import PersonPinIcon from '@material-ui/icons/PersonPin';
-import HelpIcon from '@material-ui/icons/Help';
-import ShoppingBasket from '@material-ui/icons/ShoppingBasket';
-import ThumbDown from '@material-ui/icons/ThumbDown';
-import ThumbUp from '@material-ui/icons/ThumbUp';
+import DescriptionIcon from '@material-ui/icons/Description';
+import LineSyleIcon from '@material-ui/icons/LineStyle';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
+import { Form } from '@unform/web';
 import Layout from '~/template/Layout';
 import history from '~/services/history';
+
+// forms
+import DadosBasicosForm from './components/forms/DadosBasicosForm';
 
 import api from '~/services/api';
 
@@ -119,54 +122,56 @@ export default function Identificacao(props) {
             >
               <Tab
                 label="Dados básicos"
-                icon={<PhoneIcon />}
+                icon={<PersonOutlineIcon />}
                 {...a11yProps(0)}
               />
               <Tab
                 label="Dados genéricos"
-                icon={<FavoriteIcon />}
+                icon={<AssignmentIcon />}
                 {...a11yProps(1)}
               />
               <Tab
                 label="Certidões"
-                icon={<PersonPinIcon />}
+                icon={<DescriptionIcon />}
                 {...a11yProps(2)}
               />
               <Tab
                 label="Características físicas"
-                icon={<HelpIcon />}
+                icon={<PersonPinIcon />}
                 {...a11yProps(3)}
               />
               <Tab
                 label="Dados Específicos"
-                icon={<ShoppingBasket />}
+                icon={<LineSyleIcon />}
                 {...a11yProps(4)}
               />
               <Tab
                 label="Individuais datiloscópica"
-                icon={<ThumbDown />}
+                icon={<FingerPrintIcon />}
                 {...a11yProps(5)}
               />
             </Tabs>
           </AppBar>
-          <TabPanel value={value} index={0}>
-            Item One
-          </TabPanel>
-          <TabPanel value={value} index={1}>
-            Item Two
-          </TabPanel>
-          <TabPanel value={value} index={2}>
-            Item Three
-          </TabPanel>
-          <TabPanel value={value} index={3}>
-            Item Four
-          </TabPanel>
-          <TabPanel value={value} index={4}>
-            Item Five
-          </TabPanel>
-          <TabPanel value={value} index={5}>
-            Item Six
-          </TabPanel>
+          <Form name="identificacaoForm">
+            <TabPanel value={value} index={0}>
+              <DadosBasicosForm />
+            </TabPanel>
+            <TabPanel value={value} index={1}>
+              Item Two
+            </TabPanel>
+            <TabPanel value={value} index={2}>
+              Item Three
+            </TabPanel>
+            <TabPanel value={value} index={3}>
+              Item Four
+            </TabPanel>
+            <TabPanel value={value} index={4}>
+              Item Five
+            </TabPanel>
+            <TabPanel value={value} index={5}>
+              Item Six
+            </TabPanel>
+          </Form>
         </div>
         <Button
           variant="outlined"

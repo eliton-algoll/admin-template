@@ -206,11 +206,11 @@ function ProtocoloForm({ pessoa, handleSubmit }) {
               margin="dense"
               id="tipoDoc"
               name="tipoDoc"
-              label="Tipo de documento"
-              fullWidth
               SelectProps={{
                 native: true,
               }}
+              label="Tipo de documento"
+              fullWidth
             >
               <option value="">--Selecione--</option>
               <option value="1">Cartão de CB/SD</option>
