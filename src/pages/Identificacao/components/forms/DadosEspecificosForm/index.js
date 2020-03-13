@@ -1,14 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
+import React, { useState } from 'react';
+
 import { TextField } from 'unform-material-ui';
 import { Content } from './styles';
 
-function DadosBasicosForm({ data }) {
+import imageDefault from '~/assets/images/user.png';
+
+export default function DadosEspecificosForm() {
   const [pessoa, setPessoa] = useState({});
 
-  useEffect(() => {
-    setPessoa(data);
-  }, [data]);
   return (
     <Content>
       <div className="row-1">
@@ -19,7 +18,6 @@ function DadosBasicosForm({ data }) {
             margin="dense"
             id="nome"
             name="nome"
-            value={pessoa.nome}
             label="Nome"
             type="text"
             fullWidth
@@ -152,9 +150,3 @@ function DadosBasicosForm({ data }) {
     </Content>
   );
 }
-
-DadosBasicosForm.propTypes = {
-  data: PropTypes.objectOf.isRequired,
-};
-
-export default DadosBasicosForm;

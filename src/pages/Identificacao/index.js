@@ -19,6 +19,11 @@ import history from '~/services/history';
 
 // forms
 import DadosBasicosForm from './components/forms/DadosBasicosForm';
+import DadosGenericosForm from './components/forms/DadosGenericosForm';
+import DadosEspecificosForm from './components/forms/DadosEspecificosForm';
+import CertidoesForm from './components/forms/CertidoesForm';
+import CaracteristicasForm from './components/forms/CaracteristicasForm';
+import DatiloscopicaForm from './components/forms/DatiloscopicaForm';
 
 import api from '~/services/api';
 
@@ -154,22 +159,22 @@ export default function Identificacao(props) {
           </AppBar>
           <Form name="identificacaoForm">
             <TabPanel value={value} index={0}>
-              <DadosBasicosForm />
+              <DadosBasicosForm data={pessoa} />
             </TabPanel>
             <TabPanel value={value} index={1}>
-              Item Two
+              <DadosGenericosForm />
             </TabPanel>
             <TabPanel value={value} index={2}>
-              Item Three
+              <CertidoesForm />
             </TabPanel>
             <TabPanel value={value} index={3}>
-              Item Four
+              <CaracteristicasForm />
             </TabPanel>
             <TabPanel value={value} index={4}>
-              Item Five
+              <DadosEspecificosForm />
             </TabPanel>
             <TabPanel value={value} index={5}>
-              Item Six
+              <DatiloscopicaForm />
             </TabPanel>
           </Form>
         </div>
