@@ -9,6 +9,7 @@ function DadosBasicosForm({ data }) {
   useEffect(() => {
     setPessoa(data);
   }, [data]);
+
   return (
     <Content>
       <div className="row-1">
