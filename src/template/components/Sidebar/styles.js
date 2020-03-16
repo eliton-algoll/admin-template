@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const Side = styled.div`
-  width: 230px;
+  width: 250px;
   height: 100%;
   display: flex;
   flex-direction: column;

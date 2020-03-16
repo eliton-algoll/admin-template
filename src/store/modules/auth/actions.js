@@ -12,6 +12,12 @@ export function loginSuccess(user) {
   };
 }
 
+export function logout() {
+  return {
+    type: '@auth/LOGOUT',
+  };
+}
+
 export function loginFailure() {
   return {
     type: '@auth/LOGIN_FAILURE',

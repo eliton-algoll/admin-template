@@ -12,6 +12,7 @@ export const HeaderStyled = styled.header`
   z-index: 1000;
 
   .user-avatar {
+    cursor: pointer;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -41,7 +42,6 @@ export const HeaderStyled = styled.header`
   .logo img {
     width: 48px;
     height: 56px;
-    cursor: pointer;
   }
 
   .logo strong {

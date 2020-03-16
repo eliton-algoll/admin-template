@@ -3,7 +3,7 @@ import React from 'react';
 import MaterialTable from 'material-table';
 import PropTypes from 'prop-types';
 
-function Table({ data, columns, title, actions }) {
+function Table({ data, columns, title, actions, ...rest }) {
   return (
     <MaterialTable
       className="tables"
@@ -18,7 +18,7 @@ function Table({ data, columns, title, actions }) {
         sorting: false,
 
         cellStyle: {
-          fontSize: '12px',
+          fontSize: '14px',
         },
         headerStyle: {
           borderBottom: '1px solid #2a4f59',
@@ -45,12 +45,13 @@ function Table({ data, columns, title, actions }) {
           emptyDataSourceMessage: 'Nenhum registro encontrado',
         },
       }}
+      {...rest}
     />
   );
 }
 
 Table.propTypes = {
-  data: PropTypes.arrayOf.isRequired,
+  // data: PropTypes.arrayOf.isRequired,
   columns: PropTypes.arrayOf.isRequired,
   title: PropTypes.string.isRequired,
   actions: PropTypes.arrayOf.isRequired,
