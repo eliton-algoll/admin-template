@@ -14,8 +14,11 @@ import LineSyleIcon from '@material-ui/icons/LineStyle';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import { Form } from '@unform/web';
+import { useDispatch } from 'react-redux';
 import Layout from '~/template/Layout';
 import history from '~/services/history';
+
+import { loadProtocolo } from '~/store/modules/protocolo/actions';
 
 // forms
 import DadosBasicosForm from './components/forms/DadosBasicosForm';
@@ -68,6 +71,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function Identificacao(props) {
+  const dispatch = useDispatch();
   const [protocolo, setProtocolo] = useState({});
   const [pessoa, setPessoa] = useState({});
   const [tipoPessoa, setTipoPessoa] = useState({});
@@ -91,6 +95,7 @@ export default function Identificacao(props) {
   useEffect(() => {
     async function loadProtocolo() {
       const codProtocolo = props.match.params.protocolo;
+      dispatch(loadProtocolo(codProtocolo));
 
       const response = await api.get(
         `/identificacao/findprotocolo/${codProtocolo}`
