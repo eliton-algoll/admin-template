@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { parseISO, format } from 'date-fns';
 import { connect } from 'react-redux';
 import pt from 'date-fns/locale/pt';
+import { toast } from 'react-toastify';
 import history from '~/services/history';
 import Layout from '~/template/Layout';
 
@@ -9,16 +10,23 @@ import TableStyled from '~/utils/Table';
 import api from '~/services/api';
 
 import DialogForm from '~/helpers/forms/DialogForm';
+import DialogTable from '~/helpers/tables/DialogTable';
 
 // formulários
 import ProtocoloForm from './components/forms/ProtocoloForm';
 import BuscaForm from './components/forms/BuscaForm';
 
+import imageDefault from '~/assets/images/user.png';
+
 function Protocolo(props) {
+  const { dispatch } = props;
   const [protocolos, setProtocolos] = useState([]);
   const [open, setOpen] = useState(false);
   const [openIdt, setOpenIdt] = useState(false);
+  const [openVinculados, setOpenVinculados] = useState(false);
   const [basePessoa, setBasePessoa] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [listaVinculados, setListaVinculados] = useState([]);
 
   const handleOpen = () => {
     setOpen(true);
@@ -28,8 +36,15 @@ function Protocolo(props) {
     setOpenIdt(true);
   };
 
+  const handleOpenVinculados = () => {
+    setOpenVinculados(true);
+  };
+
   const handleClose = () => {
     setOpen(false);
+  };
+  const handleCloseVinculados = () => {
+    setOpenVinculados(false);
   };
 
   const handleCloseIdt = () => {
@@ -37,15 +52,26 @@ function Protocolo(props) {
   };
 
   async function handleSubmit(data) {
-    const { dispatch } = props;
+    setLoading(true);
+
+    if (data.nome && !data.idt) {
+      const vinculadosByNome = await api.get(
+        `/identificacao/protocolo/findMilitarNome/0/0/${data.nome}`
+      );
+
+      setLoading(false);
+      setListaVinculados(vinculadosByNome.data);
+      handleOpenVinculados();
+      handleCloseIdt();
+    }
 
     const protocoloExist = await api.get(
       `/identificacao/protocolo/verificaidtprotocolo/${data.idt}`
     );
 
     if (protocoloExist.data.length !== 0) {
-      alert(protocoloExist.data.msgm);
-
+      toast.error(protocoloExist.data.msgm, { autoClose: false });
+      setLoading(false);
       return;
     }
 
@@ -53,7 +79,14 @@ function Protocolo(props) {
       `/identificacao/protocolo/findDadosmilitar/${data.idt}`
     );
 
+    if (!response.data.dados) {
+      toast.error('Identidade inválida');
+      setLoading(false);
+      return;
+    }
+
     setBasePessoa(response.data.dados);
+    setLoading(false);
 
     dispatch({
       type: 'ADD_DADOS_PESSOA',
@@ -144,6 +177,55 @@ function Protocolo(props) {
     },
   ];
 
+  const columnsVinculados = [
+    {
+      title: '',
+      field: 'foto',
+      render: rowData => {
+        return rowData.foto ? (
+          <img
+            src={`data:image/png;base64,${rowData.foto}`}
+            alt="foto"
+            style={{ width: '60px', height: '80px;', borderRadius: '50%' }}
+          />
+        ) : (
+          <img
+            src={imageDefault}
+            alt="foto"
+            style={{ width: '60px', height: '80px;', borderRadius: '50%' }}
+          />
+        );
+      },
+    },
+    {
+      title: 'NOME',
+      field: 'nome',
+    },
+    { title: 'IDENTIDADE', field: 'idt' },
+    { title: 'NOME DA MÃE', field: 'nomeMae' },
+    { title: 'CPF', field: 'cpf' },
+    { title: 'NASCIMENTO', field: 'dtNascimento' },
+  ];
+
+  const actionsVinculados = [
+    {
+      icon: 'chevron_right',
+      tooltip: 'Gerar Protocolo',
+      onClick: (event, rowData) => {
+        setBasePessoa(rowData);
+        setLoading(false);
+
+        dispatch({
+          type: 'ADD_DADOS_PESSOA',
+          basePessoa: rowData,
+        });
+
+        handleCloseVinculados();
+        handleOpen();
+      },
+    },
+  ];
+
   const actions = [
     {
       icon: 'perm_identity',
@@ -180,12 +262,25 @@ function Protocolo(props) {
       <DialogForm
         handleClose={handleCloseIdt}
         handleOpen={openIdt}
-        title="Gerar Protocolo"
+        title="Pesquisar"
         submitButton="Pesquisar"
         form="buscaForm"
       >
-        <BuscaForm handleSubmit={handleSubmit} />
+        <BuscaForm handleSubmit={handleSubmit} loading={loading} />
       </DialogForm>
+
+      <DialogTable
+        handleClose={handleCloseVinculados}
+        handleOpen={openVinculados}
+        title="Lista de vinculados encontrados"
+      >
+        <TableStyled
+          data={listaVinculados}
+          columns={columnsVinculados}
+          actions={actionsVinculados}
+          title={false}
+        />
+      </DialogTable>
     </Layout>
   );
 }

@@ -3,7 +3,7 @@ import { produce } from 'immer';
 
 const INITIAL_STATE = {
   user: {},
-  signed: true,
+  signed: false,
   loading: false,
 };
 
@@ -26,6 +26,7 @@ export default function auth(state = INITIAL_STATE, action) {
       }
       case '@auth/LOGOUT': {
         draft.signed = false;
+        draft.user = {};
         break;
       }
 

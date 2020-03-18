@@ -9,7 +9,7 @@ import Button from '@material-ui/core/Button';
 import { connect } from 'react-redux';
 import { Content } from './styles';
 
-function BuscaForm({ handleSubmit }) {
+function BuscaForm({ handleSubmit, loading }) {
   return (
     <Content>
       <Form onSubmit={handleSubmit} name="buscaForm">
@@ -22,7 +22,7 @@ function BuscaForm({ handleSubmit }) {
             id="idt"
             name="idt"
             label="Identidade"
-            type="text"
+            type="number"
             fullWidth
           />
 
@@ -42,7 +42,7 @@ function BuscaForm({ handleSubmit }) {
             color="primary"
             type="submit"
           >
-            Pesquisar
+            {loading ? 'Carregando...' : 'Pesquisar'}
           </Button>
         </div>
       </Form>
@@ -51,6 +51,11 @@ function BuscaForm({ handleSubmit }) {
 }
 BuscaForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
+  loading: PropTypes.bool,
+};
+
+BuscaForm.defaultProps = {
+  loading: false,
 };
 
 export default connect()(BuscaForm);

@@ -14,6 +14,10 @@ import imageDefault from '~/assets/images/user.png';
 
 const motivosIdt = [
   {
+    value: ' ',
+    label: '--Selecione--',
+  },
+  {
     value: '1',
     label: 'Cadastramento Básico',
   },
@@ -55,7 +59,6 @@ function ProtocoloForm({ pessoa, handleSubmit }) {
       const response = await api.get(
         `/identificacao/protocolo/findDadosmilitar/${idt}`
       );
-
       // setPessoa(response.data.dados);
     }
   }
@@ -212,7 +215,7 @@ function ProtocoloForm({ pessoa, handleSubmit }) {
               label="Tipo de documento"
               fullWidth
             >
-              <option value="">--Selecione--</option>
+              <option value=" ">--Selecione--</option>
               <option value="1">Cartão de CB/SD</option>
               <option value="2">Carteira de Identificação Militar(CIM)</option>
               <option value="3">Carteira de Identidade(CIMPM)</option>
@@ -230,7 +233,7 @@ function ProtocoloForm({ pessoa, handleSubmit }) {
               }}
               fullWidth
             >
-              <option value="">--Selecione--</option>
+              <option value=" ">--Selecione--</option>
               <option value="4">Civil</option>
               <option value="5">Dependente</option>
               <option value="7">Pensionista</option>
