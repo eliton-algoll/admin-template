@@ -1,9 +1,10 @@
 import { takeLatest, call, put, all } from 'redux-saga/effects';
+import { toast } from 'react-toastify';
 import history from '~/services/history';
 
 import api from '~/services/api';
 
-import { loginSuccess } from './actions';
+import { loginSuccess, loginFailure } from './actions';
 
 export function* login({ payload }) {
   const { identidade, senha } = payload;
@@ -13,7 +14,8 @@ export function* login({ payload }) {
   });
 
   if (response.data.error) {
-    alert(response.data.error);
+    toast.error(response.data.error);
+    yield put(loginFailure());
     return;
   }
 
@@ -22,4 +24,11 @@ export function* login({ payload }) {
   history.push('/');
 }
 
-export default all([takeLatest('@auth/LOGIN_REQUEST', login)]);
+export function logout() {
+  history.push('/login');
+}
+
+export default all([
+  takeLatest('@auth/LOGIN_REQUEST', login),
+  takeLatest('@auth/LOGOUT', logout),
+]);

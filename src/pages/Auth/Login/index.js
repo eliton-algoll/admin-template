@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from 'yup';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { Form } from '@unform/web';
@@ -20,6 +20,7 @@ const schema = Yup.object().shape({
 
 export default function Login() {
   const dispatch = useDispatch();
+  const loading = useSelector(state => state.auth.loading);
   const formRef = useRef(null);
 
   function handleChange(event) {
@@ -98,7 +99,7 @@ export default function Login() {
                 color="primary"
                 type="submit"
               >
-                Entrar
+                {loading ? 'Carregando...' : 'Entrar'}
               </Button>
             </div>
           </Form>
