@@ -24,7 +24,7 @@ export const Content = styled.div`
     display: flex;
     flex-direction: column;
     border-left: 1px solid #ccc;
-    margin-left: 20px;
+    margin-left: 10px;
     margin-top: 10px;
   }
 
@@ -35,7 +35,7 @@ export const Content = styled.div`
     flex-direction: column;
 
     .MuiOutlinedInput-root {
-      margin-left: 10px;
+      margin-right: 10px;
       width: 230px;
     }
   }
@@ -51,7 +51,7 @@ export const Content = styled.div`
     display: flex;
     flex-wrap: wrap;
     .MuiOutlinedInput-root {
-      margin-left: 10px;
+      margin-right: 10px;
 
       width: 270px;
     }

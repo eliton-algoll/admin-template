@@ -14,11 +14,11 @@ import LineSyleIcon from '@material-ui/icons/LineStyle';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import { Form } from '@unform/web';
-import { useDispatch } from 'react-redux';
+import { useDispatch, connect } from 'react-redux';
 import Layout from '~/template/Layout';
 import history from '~/services/history';
 
-import { loadProtocolo } from '~/store/modules/protocolo/actions';
+import { protocoloRequest } from '~/store/modules/protocolo/actions';
 
 // forms
 import DadosBasicosForm from './components/forms/DadosBasicosForm';
@@ -27,8 +27,6 @@ import DadosEspecificosForm from './components/forms/DadosEspecificosForm';
 import CertidoesForm from './components/forms/CertidoesForm';
 import CaracteristicasForm from './components/forms/CaracteristicasForm';
 import DatiloscopicaForm from './components/forms/DatiloscopicaForm';
-
-import api from '~/services/api';
 
 import { Wrapper, HeaderWraper } from './styles';
 
@@ -70,9 +68,8 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function Identificacao(props) {
+function Identificacao({ protocolo, match }) {
   const dispatch = useDispatch();
-  const [protocolo, setProtocolo] = useState({});
   const [pessoa, setPessoa] = useState({});
   const [tipoPessoa, setTipoPessoa] = useState({});
   const [militar, setMilitar] = useState({});
@@ -94,20 +91,18 @@ export default function Identificacao(props) {
 
   useEffect(() => {
     async function loadProtocolo() {
-      const codProtocolo = props.match.params.protocolo;
-      dispatch(loadProtocolo(codProtocolo));
-
-      const response = await api.get(
-        `/identificacao/findprotocolo/${codProtocolo}`
-      );
-
-      setProtocolo(response.data);
-      setPessoa(response.data.pessoa);
-      setTipoPessoa(response.data.codTipoPes);
+      const codProtocolo = match.params.protocolo;
+      dispatch(protocoloRequest(codProtocolo));
     }
 
     loadProtocolo();
   }, []);
+
+  useEffect(() => {
+    if (protocolo.pessoa) {
+      setPessoa(protocolo.pessoa);
+    }
+  }, [protocolo]);
 
   return (
     <Layout>
@@ -167,7 +162,7 @@ export default function Identificacao(props) {
               <DadosBasicosForm data={pessoa} />
             </TabPanel>
             <TabPanel value={value} index={1}>
-              <DadosGenericosForm />
+              <DadosGenericosForm data={{ pessoa, protocolo }} />
             </TabPanel>
             <TabPanel value={value} index={2}>
               <CertidoesForm />
@@ -194,3 +189,16 @@ export default function Identificacao(props) {
     </Layout>
   );
 }
+
+Identificacao.propTypes = {
+  protocolo: PropTypes.objectOf,
+  match: PropTypes.objectOf.isRequired,
+};
+
+Identificacao.defaultProps = {
+  protocolo: {},
+};
+
+export default connect(state => ({ protocolo: state.protocolo.protocolo }))(
+  Identificacao
+);

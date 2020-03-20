@@ -1,14 +1,14 @@
 export function protocoloRequest(data) {
   return {
     type: '@protocolo/PROTOCOLO_REQUEST',
-    payload: data,
+    payload: { codProtocolo: data },
   };
 }
 
 export function loadProtocolo(protocolo) {
   return {
     type: '@protocolo/LOAD_PROTOCOLO',
-    payload: protocolo,
+    payload: { protocolo },
   };
 }
 
