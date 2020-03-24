@@ -16,7 +16,6 @@ export default function CertidaoNova() {
             name="dataExp"
             label="Data de Expedição"
             type="text"
-            fullWidth
           />
 
           <TextField
@@ -27,7 +26,6 @@ export default function CertidaoNova() {
             name="dataRegistro"
             label="Data do registro"
             type="text"
-            fullWidth
           />
 
           <TextField
@@ -38,7 +36,6 @@ export default function CertidaoNova() {
             name="cartorio"
             label="Cartório"
             type="text"
-            fullWidth
           />
 
           <TextField
@@ -49,11 +46,8 @@ export default function CertidaoNova() {
             name="acervo"
             label="Acervo"
             type="text"
-            fullWidth
           />
-        </div>
-        <div className="col-line" />
-        <div className="col-2">
+
           <TextField
             autoFocus
             variant="outlined"
@@ -70,7 +64,7 @@ export default function CertidaoNova() {
             id="anoRegistro"
             name="anoRegistro"
             label="Ano do Registro"
-            type="text"
+            type="number"
           />
           <TextField
             autoFocus
@@ -79,16 +73,12 @@ export default function CertidaoNova() {
             id="tipoRegistro"
             name="tipoRegistro"
             label="Tipo de Registro"
-            type="text"
+            type="number"
             inputProps={{
               placeholder: '1 - Nasc, 2 - Cas, 3 - Óbito ',
             }}
           />
-        </div>
-      </div>
-      <div className="row-line" />
-      <div className="row-2">
-        <div className="col-3">
+
           <TextField
             autoFocus
             variant="outlined"
@@ -123,7 +113,8 @@ export default function CertidaoNova() {
             id="digitoVerificador"
             name="digitoVerificador"
             label="Dígito verificador"
-            type="text"
+            type="number"
+            inputProps={{ readOnly: true }}
           />
           <TextField
             autoFocus
@@ -139,6 +130,8 @@ export default function CertidaoNova() {
             <option value="2">Separação Judicial</option>
             <option value="3">Viúvo(a)</option>
           </TextField>
+        </div>
+        <div className="certidao-extenso">
           <TextField
             autoFocus
             variant="outlined"
@@ -147,6 +140,7 @@ export default function CertidaoNova() {
             name="certidao"
             label="Certidão"
             type="text"
+            inputProps={{ readOnly: true }}
             fullWidth
           />
         </div>

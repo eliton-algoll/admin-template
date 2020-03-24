@@ -1,9 +1,34 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { TextField } from 'unform-material-ui';
 import { Content } from '../styles';
 
+import Estado from '~/utils/Forms/Estado';
+
+import api from '~/services/api';
+
 export default function CertidaoAntiga() {
+  const [cartorios, setCartorios] = useState([]);
+  const [cidades, setCidades] = useState([]);
+  const [certidao, setCertidao] = useState('');
+
+  async function handleChangeUf(e) {
+    const response = await api.get(
+      `/identificacao/findCidadeByPais/0/${e.target.value}`
+    );
+
+    setCidades(response.data);
+
+    console.tron.log(response.data);
+  }
+
+  async function handleChangeCidade(e) {
+    const response = await api.get(
+      `/identificacao/cartorio/findCartorioCidade/${e.target.value}`
+    );
+    setCartorios(response.data);
+  }
+
   return (
     <Content>
       <div className="row-1">
@@ -15,8 +40,10 @@ export default function CertidaoAntiga() {
             id="dataExp"
             name="dataExp"
             label="Data de Expedição"
-            type="text"
-            fullWidth
+            InputLabelProps={{
+              shrink: true,
+            }}
+            type="date"
           />
 
           <TextField
@@ -26,20 +53,51 @@ export default function CertidaoAntiga() {
             id="dataRegistro"
             name="dataRegistro"
             label="Data do registro"
-            type="text"
-            fullWidth
+            InputLabelProps={{
+              shrink: true,
+            }}
+            type="date"
           />
+
+          <Estado name="ufCert" label="Estado" onChange={handleChangeUf} />
 
           <TextField
             autoFocus
             variant="outlined"
             margin="dense"
-            id="cartorio"
-            name="cartorio"
+            id="cidadeCartorio"
+            name="cidadeCartorio"
+            label="Cidade"
+            select
+            SelectProps={{
+              native: true,
+            }}
+            onChange={handleChangeCidade}
+          >
+            <option value={null}>--Selecione--</option>
+            {cidades.map(cidade => (
+              <option value={cidade.codigo}>{cidade.nome}</option>
+            ))}
+          </TextField>
+
+          <TextField
+            autoFocus
+            variant="outlined"
+            margin="dense"
+            name="cartorioVelho"
             label="Cartório"
-            type="text"
-            fullWidth
-          />
+            select
+            SelectProps={{
+              native: true,
+            }}
+          >
+            <option value={null}>--Selecione--</option>
+            {cartorios.map(cartorio => (
+              <option value={cartorio.codigo}>
+                {cartorio.nomeIdt.trim() ? cartorio.nomeIdt : cartorio.nome}
+              </option>
+            ))}
+          </TextField>
 
           <TextField
             autoFocus
@@ -48,12 +106,14 @@ export default function CertidaoAntiga() {
             id="acervo"
             name="acervo"
             label="Acervo"
-            type="text"
-            fullWidth
-          />
-        </div>
-        <div className="col-line" />
-        <div className="col-2">
+            select
+            SelectProps={{ native: true }}
+          >
+            <option value={null}>-- Selecione --</option>
+            <option value="01">Próprio</option>
+            <option value="02">Incorporados</option>
+          </TextField>
+
           <TextField
             autoFocus
             variant="outlined"
@@ -62,6 +122,10 @@ export default function CertidaoAntiga() {
             name="tipoServico"
             label="serviço"
             type="text"
+            defaultValue="55"
+            inputProps={{
+              readOnly: true,
+            }}
           />
           <TextField
             autoFocus
@@ -70,7 +134,7 @@ export default function CertidaoAntiga() {
             id="anoRegistro"
             name="anoRegistro"
             label="Ano do Registro"
-            type="text"
+            type="number"
           />
           <TextField
             autoFocus
@@ -78,17 +142,23 @@ export default function CertidaoAntiga() {
             margin="dense"
             id="tipoRegistro"
             name="tipoRegistro"
-            label="Tipo de Registro"
-            type="text"
-            inputProps={{
-              placeholder: '1 - Nasc, 2 - Cas, 3 - Óbito ',
+            label="Tipo de certidão"
+            select
+            SelectProps={{
+              native: true,
             }}
-          />
-        </div>
-      </div>
-      <div className="row-line" />
-      <div className="row-2">
-        <div className="col-3">
+          >
+            <option value={null}>-- Selecione --</option>
+            <option value="1">Registro de Nascimento</option>
+            <option value="2">Registro de Casamento</option>
+            <option value="3">
+              Registro de Casamento Aux. (Religioso com efeito civil)
+            </option>
+            <option value="4">Registro de Óbitos</option>
+            <option value="5">Registro de Óbitos Aux. (Natimorto)</option>
+            <option value="6">Registro de Proclama</option>
+          </TextField>
+
           <TextField
             autoFocus
             variant="outlined"
@@ -124,6 +194,7 @@ export default function CertidaoAntiga() {
             name="digitoVerificador"
             label="Dígito verificador"
             type="text"
+            inputProps={{ readOnly: true }}
           />
           <TextField
             autoFocus
@@ -133,21 +204,27 @@ export default function CertidaoAntiga() {
             name="tipoAverbacaoIdt"
             label="Averbação"
             select
+            SelectProps={{
+              native: true,
+            }}
           >
             <option value={null}>-- Selecione --</option>
             <option value="1">Divórcio</option>
             <option value="2">Separação Judicial</option>
             <option value="3">Viúvo(a)</option>
           </TextField>
+        </div>
+        <div className="certidao-extenso">
           <TextField
             autoFocus
             variant="outlined"
             margin="dense"
             id="certidao"
             name="certidao"
-            label="Certidão"
+            label="Certidão por extenso"
             type="text"
             fullWidth
+            inputProps={{ readOnly: true }}
           />
         </div>
       </div>

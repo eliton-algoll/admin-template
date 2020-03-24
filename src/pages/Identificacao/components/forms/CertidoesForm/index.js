@@ -12,7 +12,7 @@ import CertidaoAntiga from './CertidaoAntiga';
 
 export default function CertidoesForm() {
   const [pessoa, setPessoa] = useState({});
-  const [modeloCertificado, setModeloCertificado] = useState(0);
+  const [modeloCertificado, setModeloCertificado] = useState('0');
 
   function handleModelo(e) {
     setModeloCertificado(e.target.value);
@@ -44,8 +44,8 @@ export default function CertidoesForm() {
             </RadioGroup>
           </FormControl>
 
-          {modeloCertificado === '1' && <CertidaoNova />}
-          {modeloCertificado === '0' && <CertidaoAntiga />}
+          {modeloCertificado === '0' && <CertidaoNova />}
+          {modeloCertificado === '1' && <CertidaoAntiga />}
         </div>
       </div>
     </Content>
