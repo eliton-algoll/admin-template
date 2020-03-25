@@ -171,7 +171,7 @@ function Identificacao({ protocolo, match }) {
               <CaracteristicasForm />
             </TabPanel>
             <TabPanel value={value} index={4}>
-              <DadosEspecificosForm />
+              <DadosEspecificosForm data={pessoa} />
             </TabPanel>
             <TabPanel value={value} index={5}>
               <DatiloscopicaForm />

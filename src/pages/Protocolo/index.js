@@ -123,6 +123,8 @@ function Protocolo(props) {
       setProtocolos([...protocolos, response.data.protocolo]);
 
       handleClose();
+    } else {
+      console.log(response);
     }
   }
 

@@ -158,11 +158,13 @@ function ProtocoloForm({ pessoa, handleSubmit }) {
                 autoFocus
                 variant="outlined"
                 margin="dense"
-                id="dtExpedicao"
-                name="dtExpedicao"
-                InputProps={{
-                  readOnly: true,
-                }}
+                id="dtExpedcao"
+                name="dtExpedcao"
+                InputProps={
+                  {
+                    // readOnly: true,
+                  }
+                }
                 label="Data"
                 defaultValue={format(new Date(), 'dd/MM/y')}
                 type="text"
