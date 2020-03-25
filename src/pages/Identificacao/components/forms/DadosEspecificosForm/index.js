@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-import { TextField } from 'unform-material-ui';
 import PropTypes from 'prop-types';
 import { Content } from './styles';
 
