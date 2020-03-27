@@ -5,26 +5,62 @@ export const Content = styled.div`
     width: 100%;
     display: flex;
   }
-  .row-2 {
-    width: 100%;
-    max-width: 1000px;
-    display: flex;
-    margin-top: 10px;
-  }
 
   .col-1 {
     display: flex;
     flex-direction: column;
-    width: 100%;
-    max-width: 750px;
+    align-items: baseline;
+
     flex-wrap: wrap;
+
+    .MuiOutlinedInput-root {
+      margin-right: 10px;
+      width: 200px;
+    }
+
+    .row-dedos {
+      display: flex;
+    }
+
+    img {
+      width: 120px;
+    }
+  }
+  .formula {
+    display: flex;
+    align-self: center;
+    margin-top: 30px;
+  }
+  .assinatura {
+    display: flex;
+    align-self: center;
+    margin-top: 30px;
+    width: 420px;
+    height: 120px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+
+    img {
+      flex: 1;
+    }
   }
 
-  .col-line {
+  .dedo-digital {
     display: flex;
     flex-direction: column;
-    border-left: 1px solid #ccc;
-    margin-left: 20px;
+    align-items: center;
+  }
+
+  .col-foto {
+    img {
+      width: 270px;
+      margin-left: 30px;
+    }
+  }
+
+  .row-2 {
+    width: 100%;
+    display: flex;
     margin-top: 10px;
   }
 
@@ -37,23 +73,6 @@ export const Content = styled.div`
     .MuiOutlinedInput-root {
       margin-left: 10px;
       width: 230px;
-    }
-  }
-
-  .row-line {
-    display: flex;
-    flex-direction: column;
-    border-top: 1px solid #ccc;
-    margin-top: 10px;
-  }
-
-  .col-3 {
-    display: flex;
-    flex-wrap: wrap;
-    .MuiOutlinedInput-root {
-      margin-left: 10px;
-
-      width: 270px;
     }
   }
 `;

@@ -2,7 +2,8 @@ import styled from 'styled-components';
 
 export const Side = styled.div`
   width: 250px;
-  height: 100%;
+  min-height: 100vh;
+  /* min-height: 100%; */
   display: flex;
   flex-direction: column;
   background: #2a3f54;

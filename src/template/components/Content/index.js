@@ -11,9 +11,10 @@ function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {'By © '}
-      <Link color="inherit" href="https://material-ui.com/">
+      <Link color="inherit" href="https://dsm.dgp.eb.mil.br">
         Diretoria de Serviço Militar
-      </Link>{' '}
+      </Link>
+      {' - '}
       {new Date().getFullYear()}
       {'.'}
     </Typography>
@@ -26,9 +27,7 @@ function Content({ children }) {
       <ContentStyled>
         <Breadcrumb />
         <Contents>{children}</Contents>
-        <Box pt={4}>
-          <Copyright />
-        </Box>
+        <Copyright />
       </ContentStyled>
     </>
   );
