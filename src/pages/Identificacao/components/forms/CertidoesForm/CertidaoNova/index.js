@@ -56,6 +56,10 @@ export default function CertidaoNova() {
             name="tipoServico"
             label="serviço"
             type="text"
+            defaultValue="55"
+            inputProps={{
+              readOnly: true,
+            }}
           />
           <TextField
             autoFocus

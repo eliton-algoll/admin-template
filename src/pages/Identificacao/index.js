@@ -19,6 +19,7 @@ import Layout from '~/template/Layout';
 import history from '~/services/history';
 
 import { protocoloRequest } from '~/store/modules/protocolo/actions';
+import { coletaRequest } from '~/store/modules/coleta/actions';
 
 // forms
 import DadosBasicosForm from './components/forms/DadosBasicosForm';
@@ -89,6 +90,7 @@ function Identificacao({ protocolo, match }) {
     history.push('/protocolo');
   }
 
+  // carregando informações do protocolo
   useEffect(() => {
     async function loadProtocolo() {
       const codProtocolo = match.params.protocolo;
@@ -98,9 +100,27 @@ function Identificacao({ protocolo, match }) {
     loadProtocolo();
   }, []);
 
+  // carregando informações da coleta
+  useEffect(() => {
+    async function loadColeta() {
+      dispatch(coletaRequest(pessoa.idt));
+    }
+    if (pessoa.idt) {
+      loadColeta();
+    }
+  }, [pessoa]);
+
   useEffect(() => {
     if (protocolo.pessoa) {
       setPessoa(protocolo.pessoa);
+      setTipoPessoa(protocolo.codTipoPes);
+      setPensionista(protocolo.pensionista);
+      setDependente(protocolo.dependente);
+      setMilitar({
+        om: protocolo.om,
+        militar: protocolo.militar,
+        promocao: protocolo.promocao,
+      });
     }
   }, [protocolo]);
 
@@ -168,10 +188,12 @@ function Identificacao({ protocolo, match }) {
               <CertidoesForm />
             </TabPanel>
             <TabPanel value={value} index={3}>
-              <CaracteristicasForm />
+              <CaracteristicasForm data={pessoa} />
             </TabPanel>
             <TabPanel value={value} index={4}>
-              <DadosEspecificosForm data={pessoa} />
+              <DadosEspecificosForm
+                data={{ tipoPessoa, militar, pensionista, dependente }}
+              />
             </TabPanel>
             <TabPanel value={value} index={5}>
               <DatiloscopicaForm />

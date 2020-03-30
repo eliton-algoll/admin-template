@@ -1,13 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { TextField } from 'unform-material-ui';
+import PropTypes from 'prop-types';
 import { Content } from './styles';
 
-import imageDefault from '~/assets/images/user.png';
-
-export default function CaracteristicasForm() {
+function CaracteristicasForm({ data }) {
   const [pessoa, setPessoa] = useState({});
 
+  useEffect(() => {
+    setPessoa(data);
+  }, [data]);
+  console.tron.log(pessoa);
   return (
     <Content>
       <div className="row-1">
@@ -19,6 +22,7 @@ export default function CaracteristicasForm() {
             id="cutis"
             name="cutis"
             label="Cútis"
+            value={pessoa.cutis}
             select
             SelectProps={{ native: true }}
           >
@@ -38,6 +42,7 @@ export default function CaracteristicasForm() {
             id="olhos"
             name="olhos"
             label="Olho"
+            value={pessoa.olhos}
             select
             SelectProps={{ native: true }}
           >
@@ -58,6 +63,7 @@ export default function CaracteristicasForm() {
             id="cabelo"
             name="cabelo"
             label="Cabelos"
+            value={pessoa.cabelo}
             select
             SelectProps={{ native: true }}
           >
@@ -103,38 +109,42 @@ export default function CaracteristicasForm() {
             <option value="Tingido">Tingido</option>
           </TextField>
 
-          <TextField
-            autoFocus
-            variant="outlined"
-            margin="dense"
-            id="bigode"
-            name="bigode"
-            label="Bigode"
-            select
-            SelectProps={{ native: true }}
-          >
-            <option value={null}>-- Selecione --</option>
-            <option value="aparado">Aparado</option>
-            <option value="rapado">Rapado</option>
-            <option value="imberbe">Imberbe</option>
-          </TextField>
-
-          <TextField
-            autoFocus
-            variant="outlined"
-            margin="dense"
-            id="barba"
-            name="barba"
-            label="Barba"
-            select
-            SelectProps={{ native: true }}
-          >
-            <option value={null}>-- Selecione --</option>
-            <option value="C">Com</option>
-            <option value="S">Sem</option>
-            <option value="I">Imberbe</option>
-          </TextField>
-
+          {pessoa.sexo === 1 && (
+            <TextField
+              autoFocus
+              variant="outlined"
+              margin="dense"
+              id="bigode"
+              name="bigode"
+              label="Bigode"
+              value={pessoa.bigode}
+              select
+              SelectProps={{ native: true }}
+            >
+              <option value={null}>-- Selecione --</option>
+              <option value="aparado">Aparado</option>
+              <option value="rapado">Rapado</option>
+              <option value="imberbe">Imberbe</option>
+            </TextField>
+          )}
+          {pessoa.sexo === 1 && (
+            <TextField
+              autoFocus
+              variant="outlined"
+              margin="dense"
+              id="barba"
+              name="barba"
+              label="Barba"
+              value={pessoa.barba}
+              select
+              SelectProps={{ native: true }}
+            >
+              <option value={null}>-- Selecione --</option>
+              <option value="C">Com</option>
+              <option value="S">Sem</option>
+              <option value="I">Imberbe</option>
+            </TextField>
+          )}
           <TextField
             autoFocus
             variant="outlined"
@@ -144,6 +154,7 @@ export default function CaracteristicasForm() {
             label="Anomalia na cabeça"
             select
             SelectProps={{ native: true }}
+            value={pessoa.cabeca}
           >
             <option value={null}>-- Selecione --</option>
             <option value="MICROCEFALIA">Microcefalia</option>
@@ -157,6 +168,7 @@ export default function CaracteristicasForm() {
             id="sinaisParticulares"
             name="sinaisParticulares"
             label="Sinais particulares"
+            value={pessoa.sinaisParticulares}
             type="text"
             multiline
           />
@@ -165,3 +177,9 @@ export default function CaracteristicasForm() {
     </Content>
   );
 }
+
+CaracteristicasForm.propTypes = {
+  data: PropTypes.objectOf.isRequired,
+};
+
+export default CaracteristicasForm;

@@ -1,10 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { TextField } from 'unform-material-ui';
 import DialogContentText from '@material-ui/core/DialogContentText';
+import PropTypes from 'prop-types';
 import { Content } from '../styles';
 
-export default function DadosDependente() {
+function DadosDependente({ data }) {
+  const [dependente, setDependente] = useState({});
+
+  useEffect(() => {
+    setDependente(data);
+    console.tron.log(data);
+  }, [data]);
+
   return (
     <Content>
       <div className="row-1">
@@ -19,6 +27,7 @@ export default function DadosDependente() {
               id="idtTitular"
               name="idtTitular"
               label="Identidade"
+              value={dependente.titular ? dependente.titular.idt : null}
               type="text"
             />
 
@@ -29,6 +38,7 @@ export default function DadosDependente() {
               id="nomeTitular"
               name="nomeTitular"
               label="Nome"
+              value={dependente.titular ? dependente.titular.nome : null}
               type="text"
             />
           </div>
@@ -42,6 +52,9 @@ export default function DadosDependente() {
               name="exCombatente"
               label="Grau de parentesco"
               select
+              value={
+                dependente.titular ? dependente.titular.grauParentescoIdt : null
+              }
               SelectProps={{ native: true }}
             >
               <option value={null}>--Selecione--</option>
@@ -83,3 +96,9 @@ export default function DadosDependente() {
     </Content>
   );
 }
+
+DadosDependente.propTypes = {
+  data: PropTypes.objectOf.isRequired,
+};
+
+export default DadosDependente;

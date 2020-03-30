@@ -1,10 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { TextField } from 'unform-material-ui';
 import DialogContentText from '@material-ui/core/DialogContentText';
+import PropTypes from 'prop-types';
 import { Content } from '../styles';
 
-export default function DadosPensionista() {
+function DadosPensionista({ data }) {
+  const [pensao, setPensao] = useState({});
+
+  useEffect(() => {
+    setPensao(data);
+    console.tron.log(data);
+  }, [data]);
+
   return (
     <Content>
       <div className="row-1">
@@ -19,6 +27,7 @@ export default function DadosPensionista() {
               id="docTipo"
               name="docTipo"
               label="Tipo de documento"
+              value={pensao.docTipo}
               select
               SelectProps={{ native: true }}
             >
@@ -34,6 +43,7 @@ export default function DadosPensionista() {
               id="docNumero"
               name="docNumero"
               label="N° do documento"
+              value={pensao.docNumero}
               type="text"
             />
 
@@ -43,6 +53,7 @@ export default function DadosPensionista() {
               margin="dense"
               id="exCombatente"
               name="exCombatente"
+              value={pensao.exCombatente}
               label="Ex-combatente"
               select
               SelectProps={{ native: true }}
@@ -83,3 +94,9 @@ export default function DadosPensionista() {
     </Content>
   );
 }
+
+DadosPensionista.propTypes = {
+  data: PropTypes.objectOf.isRequired,
+};
+
+export default DadosPensionista;

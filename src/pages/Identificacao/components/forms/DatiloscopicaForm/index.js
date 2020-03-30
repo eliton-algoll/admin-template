@@ -1,13 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
 
 import { TextField } from 'unform-material-ui';
+import PropTypes from 'prop-types';
 import { Content } from './styles';
 
 import imageDefault from '~/assets/images/user.png';
-import digitalDefault from '~/assets/images/digital.jpg';
+import digitalDefault from '~/assets/images/loading.gif';
 import assinaturaDefault from '~/assets/images/assinatura.jpeg';
 
-export default function DatiloscopicaForm() {
+function DatiloscopicaForm({ coleta, digitais }) {
   return (
     <Content>
       <div className="row-1">
@@ -23,7 +25,14 @@ export default function DatiloscopicaForm() {
                 label="Polegar"
                 type="text"
               />
-              <img src={digitalDefault} alt="polegar Direito" />
+              {digitais[1] ? (
+                <img
+                  src={`data:image/png;base64,${digitais[1].digital}`}
+                  alt="polegar Direito"
+                />
+              ) : (
+                <img src={digitalDefault} alt="polegar Direito" />
+              )}
             </div>
             <div className="dedo-digital">
               <TextField
@@ -35,7 +44,14 @@ export default function DatiloscopicaForm() {
                 label="Indicador"
                 type="text"
               />
-              <img src={digitalDefault} alt="indicador Direito" />
+              {digitais[2] ? (
+                <img
+                  src={`data:image/png;base64,${digitais[2].digital}`}
+                  alt="indicador Direito"
+                />
+              ) : (
+                <img src={digitalDefault} alt="indicador Direito" />
+              )}
             </div>
             <div className="dedo-digital">
               <TextField
@@ -47,7 +63,14 @@ export default function DatiloscopicaForm() {
                 label="Médio"
                 type="text"
               />
-              <img src={digitalDefault} alt="anelar Direito" />
+              {digitais[3] ? (
+                <img
+                  src={`data:image/png;base64,${digitais[3].digital}`}
+                  alt="anelar Direito"
+                />
+              ) : (
+                <img src={digitalDefault} alt="anelar Direito" />
+              )}
             </div>
             <div className="dedo-digital">
               <TextField
@@ -59,7 +82,14 @@ export default function DatiloscopicaForm() {
                 label="Anelar"
                 type="text"
               />
-              <img src={digitalDefault} alt="médio Direito" />
+              {digitais[4] ? (
+                <img
+                  src={`data:image/png;base64,${digitais[4].digital}`}
+                  alt="médio Direito"
+                />
+              ) : (
+                <img src={digitalDefault} alt="médio Direito" />
+              )}
             </div>
             <div className="dedo-digital">
               <TextField
@@ -71,7 +101,14 @@ export default function DatiloscopicaForm() {
                 label="Mínimo"
                 type="text"
               />
-              <img src={digitalDefault} alt="mÍNIMO Direito" />
+              {digitais[5] ? (
+                <img
+                  src={`data:image/png;base64,${digitais[5].digital}`}
+                  alt="mínimo Direito"
+                />
+              ) : (
+                <img src={digitalDefault} alt="mínimo Direito" />
+              )}
             </div>
           </div>
 
@@ -86,7 +123,14 @@ export default function DatiloscopicaForm() {
                 label="Polegar"
                 type="text"
               />
-              <img src={digitalDefault} alt="polegar esquerdo" />
+              {digitais[6] ? (
+                <img
+                  src={`data:image/png;base64,${digitais[6].digital}`}
+                  alt="polegar esquerdo"
+                />
+              ) : (
+                <img src={digitalDefault} alt="polegar esquerdo" />
+              )}
             </div>
             <div className="dedo-digital">
               <TextField
@@ -98,7 +142,14 @@ export default function DatiloscopicaForm() {
                 label="Indicador"
                 type="text"
               />
-              <img src={digitalDefault} alt="indicador esquerdo" />
+              {digitais[7] ? (
+                <img
+                  src={`data:image/png;base64,${digitais[7].digital}`}
+                  alt="indicador esquerdo"
+                />
+              ) : (
+                <img src={digitalDefault} alt="indicador esquerdo" />
+              )}
             </div>
             <div className="dedo-digital">
               <TextField
@@ -110,7 +161,14 @@ export default function DatiloscopicaForm() {
                 label="Médio"
                 type="text"
               />
-              <img src={digitalDefault} alt="anelar esquerdo" />
+              {digitais[8] ? (
+                <img
+                  src={`data:image/png;base64,${digitais[8].digital}`}
+                  alt="anelar esquerdo"
+                />
+              ) : (
+                <img src={digitalDefault} alt="anelar esquerdo" />
+              )}
             </div>
             <div className="dedo-digital">
               <TextField
@@ -122,7 +180,14 @@ export default function DatiloscopicaForm() {
                 label="Anelar"
                 type="text"
               />
-              <img src={digitalDefault} alt="médio esquerdo" />
+              {digitais[9] ? (
+                <img
+                  src={`data:image/png;base64,${digitais[9].digital}`}
+                  alt="médio esquerdo"
+                />
+              ) : (
+                <img src={digitalDefault} alt="médio esquerdo" />
+              )}
             </div>
             <div className="dedo-digital">
               <TextField
@@ -134,7 +199,14 @@ export default function DatiloscopicaForm() {
                 label="Mínimo"
                 type="text"
               />
-              <img src={digitalDefault} alt="mÍNIMO esquerdo" />
+              {digitais[10] ? (
+                <img
+                  src={`data:image/png;base64,${digitais[10].digital}`}
+                  alt="mínimo esquerdo"
+                />
+              ) : (
+                <img src={digitalDefault} alt="mínimo esquerdo" />
+              )}
             </div>
           </div>
           <div className="formula">
@@ -149,7 +221,14 @@ export default function DatiloscopicaForm() {
             />
           </div>
           <div className="assinatura">
-            <img src={assinaturaDefault} alt="assinatura" />
+            {coleta.imagens ? (
+              <img
+                src={`data:image/png;base64,${coleta.imagens.imgAssinatura}`}
+                alt="assinatura"
+              />
+            ) : (
+              <img src={assinaturaDefault} alt="assinatura-default" />
+            )}
           </div>
           <div className="dedo-inpresso">
             <TextField
@@ -177,7 +256,14 @@ export default function DatiloscopicaForm() {
           </div>
         </div>
         <div className="col-foto">
-          <img src={imageDefault} alt="foto" />
+          {coleta.imagens ? (
+            <img
+              src={`data:image/png;base64,${coleta.imagens.imgFoto}`}
+              alt="foto"
+            />
+          ) : (
+            <img src={imageDefault} alt="foto-default" />
+          )}
         </div>
       </div>
       <div className="row-2">
@@ -227,3 +313,18 @@ export default function DatiloscopicaForm() {
     </Content>
   );
 }
+
+DatiloscopicaForm.propTypes = {
+  coleta: PropTypes.objectOf,
+  digitais: PropTypes.objectOf,
+};
+
+DatiloscopicaForm.defaultProps = {
+  coleta: {},
+  digitais: {},
+};
+
+export default connect(state => ({
+  coleta: state.coleta.coleta,
+  digitais: state.coleta.digitais,
+}))(DatiloscopicaForm);

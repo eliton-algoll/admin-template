@@ -1,10 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { TextField } from 'unform-material-ui';
 import DialogContentText from '@material-ui/core/DialogContentText';
+import PropTypes from 'prop-types';
 import { Content } from '../styles';
 
-export default function DadosMilitar() {
+function DadosMilitar({ data }) {
+  const [militar, setMilitar] = useState({});
+  const [om, setOm] = useState({});
+  const [promocao, setPromocao] = useState({});
+
+  useEffect(() => {
+    setMilitar(data.militar);
+    setOm(data.om);
+    setPromocao(data.promocao);
+  }, [data]);
   return (
     <Content>
       <div className="row-1">
@@ -18,6 +28,7 @@ export default function DadosMilitar() {
               id="nomeGuerra"
               name="nomeGuerra"
               label="Nome de guerra"
+              value={militar.nomeGuerra}
               InputLabelProps={{
                 shrink: true,
               }}
@@ -30,8 +41,10 @@ export default function DadosMilitar() {
               margin="dense"
               id="milTypeIdt"
               name="milTypeIdt"
+              value={militar.milTypeIdt}
               label="Situação militar"
               select
+              SelectProps={{ native: true }}
             >
               <option value={null}>-- Selecione --</option>
               <option value="MAOC">Oficial de Carreira</option>
@@ -56,7 +69,9 @@ export default function DadosMilitar() {
               id="postoGradCodigo"
               name="postoGradCodigo"
               label="Posto/Graduação"
+              value={militar.postoGrad}
               select
+              SelectProps={{ native: true }}
             >
               <option value={null}>-- Selecione --</option>
               <option value="1">Mar</option>
@@ -101,6 +116,7 @@ export default function DadosMilitar() {
               id="omCodom"
               name="omCodom"
               label="OM Sigla"
+              value={om.sigla}
               type="text"
             />
           </div>
@@ -114,7 +130,9 @@ export default function DadosMilitar() {
               id="postoGradPromo"
               name="postoGradPromo"
               label="Posto/Graduação"
+              value={promocao.postoGrad}
               select
+              SelectProps={{ native: true }}
             >
               <option value={null}>-- Selecione --</option>
               <option value="1">Mar</option>
@@ -159,6 +177,7 @@ export default function DadosMilitar() {
               id="docTipoIdt"
               name="docTipoIdt"
               label="Tipo de documento"
+              value={promocao.docTipoIdt}
               select
               SelectProps={{
                 native: true,
@@ -177,6 +196,7 @@ export default function DadosMilitar() {
               margin="dense"
               id="docPromocao"
               name="docPromocao"
+              value={promocao.docPromocao}
               label="Doc da promoção"
               type="text"
             />
@@ -188,10 +208,11 @@ export default function DadosMilitar() {
               id="dtDocPromocao"
               name="dtDocPromocao"
               label="Data da promoção"
-              type="date"
+              value={promocao.dtDocPromocao}
               InputLabelProps={{
-                shrink: true,
+                shrink: !!promocao.dtDocPromocao,
               }}
+              type="text"
             />
           </div>
           <div style={{ width: '800px' }}>
@@ -256,3 +277,9 @@ export default function DadosMilitar() {
     </Content>
   );
 }
+
+DadosMilitar.propTypes = {
+  data: PropTypes.objectOf.isRequired,
+};
+
+export default DadosMilitar;
