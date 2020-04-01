@@ -9,12 +9,11 @@ import { connect } from 'react-redux';
 
 import { Content } from './styles';
 
-import api from '~/services/api';
 import imageDefault from '~/assets/images/user.png';
 
 const motivosIdt = [
   {
-    value: ' ',
+    value: null,
     label: '--Selecione--',
   },
   {
@@ -51,21 +50,28 @@ const motivosIdt = [
   },
 ];
 
-function ProtocoloForm({ pessoa, handleSubmit }) {
-  async function handleChangeIdt(e) {
-    const idt = e.target.value;
+function ProtocoloForm({
+  pessoa,
+  handleSubmit,
+  user,
+  referencia,
+  loading,
+  handleChange,
+}) {
+  // async function handleChangeIdt(e) {
+  //   const idt = e.target.value;
 
-    if (idt) {
-      const response = await api.get(
-        `/identificacao/protocolo/findDadosmilitar/${idt}`
-      );
-      // setPessoa(response.data.dados);
-    }
-  }
+  //   if (idt) {
+  //     const response = await api.get(
+  //       `/identificacao/protocolo/findDadosmilitar/${idt}`
+  //     );
+  //     // setPessoa(response.data.dados);
+  //   }
+  // }
 
   return (
     <Content>
-      <Form onSubmit={handleSubmit} name="protocoloForm">
+      <Form ref={referencia} onSubmit={handleSubmit} name="protocoloForm">
         <div className="row-1">
           <div className="row-2">
             <div className="row-idt">
@@ -76,7 +82,7 @@ function ProtocoloForm({ pessoa, handleSubmit }) {
                 id="idt"
                 name="idt"
                 value={pessoa.idt}
-                onBlur={handleChangeIdt}
+                // onBlur={handleChangeIdt}
                 label="Identidade *"
                 type="text"
                 fullWidth
@@ -151,6 +157,7 @@ function ProtocoloForm({ pessoa, handleSubmit }) {
                 name="omSigla"
                 label="Órgão de identificação"
                 type="text"
+                value={user.omNome}
                 fullWidth
               />
 
@@ -192,10 +199,11 @@ function ProtocoloForm({ pessoa, handleSubmit }) {
               margin="dense"
               id="motivoIdt"
               name="motivoIdt"
+              onChange={handleChange}
               SelectProps={{
                 native: true,
               }}
-              label="Motivo da identificação"
+              label="Motivo da identificação *"
               fullWidth
             >
               {motivosIdt.map(option => (
@@ -211,13 +219,14 @@ function ProtocoloForm({ pessoa, handleSubmit }) {
               margin="dense"
               id="tipoDoc"
               name="tipoDoc"
+              onChange={handleChange}
               SelectProps={{
                 native: true,
               }}
-              label="Tipo de documento"
+              label="Tipo de documento *"
               fullWidth
             >
-              <option value=" ">--Selecione--</option>
+              <option value={null}>--Selecione--</option>
               <option value="1">Cartão de CB/SD</option>
               <option value="2">Carteira de Identificação Militar(CIM)</option>
               <option value="3">Carteira de Identidade(CIMPM)</option>
@@ -229,13 +238,14 @@ function ProtocoloForm({ pessoa, handleSubmit }) {
               margin="dense"
               id="codTipoPes"
               name="codTipoPes"
-              label="Tipo de pessoa"
+              label="Tipo de pessoa *"
               SelectProps={{
                 native: true,
               }}
+              onChange={handleChange}
               fullWidth
             >
-              <option value=" ">--Selecione--</option>
+              <option value={null}>--Selecione--</option>
               <option value="4">Civil</option>
               <option value="5">Dependente</option>
               <option value="7">Pensionista</option>
@@ -261,8 +271,9 @@ function ProtocoloForm({ pessoa, handleSubmit }) {
               margin="dense"
               id="telefone"
               name="telefone"
-              label="Telefone"
+              label="Telefone *"
               type="text"
+              onChange={handleChange}
               fullWidth
             />
             <TextField
@@ -295,7 +306,7 @@ function ProtocoloForm({ pessoa, handleSubmit }) {
                 textAlign: 'center',
               }}
             >
-              Gerar Protocolo
+              {loading ? 'gerando protocolo...' : 'Gerar Protocolo'}
             </Button>
           </div>
         </div>
@@ -306,7 +317,17 @@ function ProtocoloForm({ pessoa, handleSubmit }) {
 
 ProtocoloForm.propTypes = {
   pessoa: PropTypes.objectOf.isRequired,
+  user: PropTypes.objectOf.isRequired,
+  referencia: PropTypes.objectOf.isRequired,
+  loading: PropTypes.bool,
   handleSubmit: PropTypes.func.isRequired,
 };
 
-export default connect(state => ({ pessoa: state.pessoa }))(ProtocoloForm);
+ProtocoloForm.defaultProps = {
+  loading: false,
+};
+
+export default connect(state => ({
+  pessoa: state.pessoa,
+  user: state.auth.user,
+}))(ProtocoloForm);

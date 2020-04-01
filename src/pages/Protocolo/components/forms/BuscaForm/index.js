@@ -9,10 +9,10 @@ import Button from '@material-ui/core/Button';
 import { connect } from 'react-redux';
 import { Content } from './styles';
 
-function BuscaForm({ handleSubmit, loading }) {
+function BuscaForm({ handleSubmit, loading, referencia, handleChange }) {
   return (
     <Content>
-      <Form onSubmit={handleSubmit} name="buscaForm">
+      <Form ref={referencia} onSubmit={handleSubmit} name="buscaForm">
         <div className="row">
           <DialogContentText>Digite a Identidade ou o nome.</DialogContentText>
           <TextField
@@ -23,6 +23,7 @@ function BuscaForm({ handleSubmit, loading }) {
             name="idt"
             label="Identidade"
             type="number"
+            onChange={handleChange}
             fullWidth
           />
 
@@ -34,6 +35,7 @@ function BuscaForm({ handleSubmit, loading }) {
             name="nome"
             label="Nome"
             type="text"
+            onChange={handleChange}
             fullWidth
           />
           <Button
@@ -51,7 +53,9 @@ function BuscaForm({ handleSubmit, loading }) {
 }
 BuscaForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
+  handleChange: PropTypes.func.isRequired,
   loading: PropTypes.bool,
+  referencia: PropTypes.objectOf.isRequired,
 };
 
 BuscaForm.defaultProps = {

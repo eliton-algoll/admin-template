@@ -1,8 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { parseISO, format } from 'date-fns';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
+import PropTypes from 'prop-types';
+
 import pt from 'date-fns/locale/pt';
 import { toast } from 'react-toastify';
+import * as Yup from 'yup';
 import history from '~/services/history';
 import Layout from '~/template/Layout';
 
@@ -18,8 +21,42 @@ import BuscaForm from './components/forms/BuscaForm';
 
 import imageDefault from '~/assets/images/user.png';
 
-function Protocolo(props) {
-  const { dispatch } = props;
+// validações
+const schema = Yup.object().shape({
+  idt: Yup.string().required('A identidade é obrigatória'),
+  cpf: Yup.string().required('O CPF é obrigatório'),
+  telefone: Yup.string().required('O telefone é obrigatório'),
+  motivoIdt: Yup.number()
+    .transform(value => (isNaN(value) ? undefined : value))
+    .required('O motivo da identificação é obrigatório'),
+  tipoDoc: Yup.number()
+    .transform(value => (isNaN(value) ? undefined : value))
+    .required('O tipo de documento é obrigatório'),
+  codTipoPes: Yup.number()
+    .transform(value => (isNaN(value) ? undefined : value))
+    .required('O tipo de pessoa é obrigatório'),
+});
+
+// validando formulário de busca
+const buscaSchema = Yup.object().shape(
+  {
+    idt: Yup.string().when('nome', {
+      is: '',
+      then: Yup.string().required('Digite a Identidade ou o nome'),
+      otherwise: Yup.string(),
+    }),
+    nome: Yup.string().when('idt', {
+      is: '',
+      then: Yup.string().required(),
+      otherwise: Yup.string(),
+    }),
+  },
+  ['idt', 'nome']
+);
+
+function Protocolo({ user }) {
+  const dispatch = useDispatch();
+  const [recarregaProtocolos, setRecarregaProtocolos] = useState(false);
   const [protocolos, setProtocolos] = useState([]);
   const [open, setOpen] = useState(false);
   const [openIdt, setOpenIdt] = useState(false);
@@ -27,6 +64,8 @@ function Protocolo(props) {
   const [basePessoa, setBasePessoa] = useState({});
   const [loading, setLoading] = useState(false);
   const [listaVinculados, setListaVinculados] = useState([]);
+  const formRef = useRef(null);
+  const formBuscaRef = useRef(null);
 
   const handleOpen = () => {
     setOpen(true);
@@ -52,6 +91,24 @@ function Protocolo(props) {
   };
 
   async function handleSubmit(data) {
+    try {
+      // Remove all previous errors
+      formBuscaRef.current.setErrors({});
+
+      await buscaSchema.validate(data, {
+        abortEarly: false,
+      });
+    } catch (err) {
+      const validationErrors = {};
+      if (err instanceof Yup.ValidationError) {
+        err.inner.forEach(error => {
+          validationErrors[error.path] = error.message;
+        });
+        formBuscaRef.current.setErrors(validationErrors);
+      }
+      return;
+    }
+
     setLoading(true);
 
     if (data.nome && !data.idt) {
@@ -97,35 +154,53 @@ function Protocolo(props) {
     handleOpen();
   }
 
-  async function handleSubmitGeraProtocolo(data) {
-    const { dispatch } = props;
+  function handleChangeBusca() {
+    formBuscaRef.current.setErrors({});
+  }
 
-    const user = {
-      usuario: '1107205278',
-      omNumero: '01',
-      om: 2,
-      rm: '11',
+  function handleChangeProtocolo(event) {
+    formRef.current.setFieldError(event.currentTarget.name);
+  }
+
+  async function handleSubmitGeraProtocolo(data) {
+    setLoading(true);
+    try {
+      // Remove all previous errors
+      formRef.current.setErrors({});
+
+      await schema.validate(data, {
+        abortEarly: false,
+      });
+    } catch (err) {
+      const validationErrors = {};
+      if (err instanceof Yup.ValidationError) {
+        err.inner.forEach(error => {
+          validationErrors[error.path] = error.message;
+        });
+        formRef.current.setErrors(validationErrors);
+      }
+      setLoading(false);
+      return;
+    }
+
+    const userLogado = {
+      usuario: user.identidade,
+      omNumero: user.omNumero,
+      om: user.om,
+      rm: user.rm,
     };
 
-    const dataEnvia = { ...data, ...user };
+    const dataEnvia = { ...data, ...userLogado };
 
-    const response = await api.post(
-      `/identificacao/protocolo/gerarapi`,
-      dataEnvia
-    );
+    dispatch({
+      type: '@protocolo/CREATE_PROTOCOLO_REQUEST',
+      payload: { data: dataEnvia },
+    });
 
-    if (response.data.status === 200) {
-      dispatch({
-        type: 'ADD_PROTOCOLO',
-        protocolo: response.data.protocolo,
-      });
+    setLoading(false);
+    setRecarregaProtocolos(true);
 
-      setProtocolos([...protocolos, response.data.protocolo]);
-
-      handleClose();
-    } else {
-      console.log(response);
-    }
+    handleClose();
   }
 
   function handleClick(codProtocolo) {
@@ -140,7 +215,7 @@ function Protocolo(props) {
     }
 
     loadProtocolos();
-  }, []);
+  }, [recarregaProtocolos]);
 
   const columns = [
     {
@@ -258,7 +333,12 @@ function Protocolo(props) {
         title="Gerar Protocolo"
         submitButton="Gerar Protocolo"
       >
-        <ProtocoloForm handleSubmit={handleSubmitGeraProtocolo} />
+        <ProtocoloForm
+          referencia={formRef}
+          handleSubmit={handleSubmitGeraProtocolo}
+          handleChange={handleChangeProtocolo}
+          loading={loading}
+        />
       </DialogForm>
 
       <DialogForm
@@ -268,7 +348,12 @@ function Protocolo(props) {
         submitButton="Pesquisar"
         form="buscaForm"
       >
-        <BuscaForm handleSubmit={handleSubmit} loading={loading} />
+        <BuscaForm
+          handleSubmit={handleSubmit}
+          loading={loading}
+          referencia={formBuscaRef}
+          handleChange={handleChangeBusca}
+        />
       </DialogForm>
 
       <DialogTable
@@ -287,4 +372,8 @@ function Protocolo(props) {
   );
 }
 
-export default connect()(Protocolo);
+Protocolo.propTypes = {
+  user: PropTypes.objectOf.isRequired,
+};
+
+export default connect(state => ({ user: state.auth.user }))(Protocolo);

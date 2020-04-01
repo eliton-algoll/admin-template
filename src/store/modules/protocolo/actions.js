@@ -15,13 +15,13 @@ export function loadProtocolo(protocolo) {
 export function createProtocoloRequest(data) {
   return {
     type: '@protocolo/CREATE_PROTOCOLO_REQUEST',
-    payload: data,
+    payload: { data },
   };
 }
 
 export function createProtocoloSuccess(protocolo) {
   return {
     type: '@protocolo/CREATE_PROTOCOLO_SUCCESS',
-    payload: protocolo,
+    payload: { protocolo },
   };
 }
