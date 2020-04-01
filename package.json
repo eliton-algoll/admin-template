@@ -1,6 +1,7 @@
 {
   "name": "frontend",
   "version": "0.1.0",
+  "homepage": "http://10.166.128.114:3000",
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.9.4",
