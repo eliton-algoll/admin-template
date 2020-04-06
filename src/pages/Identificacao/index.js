@@ -77,7 +77,7 @@ function Identificacao({ protocolo, match }) {
   const [pensionista, setPensionista] = useState({});
   const [dependente, setDependente] = useState({});
 
-  const [caracteristicas, setCaracteristicas] = useState({});
+  // const [caracteristicas, setCaracteristicas] = useState({});
 
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
