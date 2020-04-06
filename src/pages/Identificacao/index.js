@@ -76,7 +76,7 @@ function Identificacao({ protocolo, match }) {
   const [militar, setMilitar] = useState({});
   const [pensionista, setPensionista] = useState({});
   const [dependente, setDependente] = useState({});
-  const [certidao, setCertidao] = useState({});
+
   const [caracteristicas, setCaracteristicas] = useState({});
 
   const classes = useStyles();
@@ -123,6 +123,10 @@ function Identificacao({ protocolo, match }) {
       });
     }
   }, [protocolo]);
+
+  async function handleSubmitIdentificacao(data) {
+    console.tron.log('formulario de identificacao', data);
+  }
 
   return (
     <Layout>
@@ -177,7 +181,7 @@ function Identificacao({ protocolo, match }) {
               />
             </Tabs>
           </AppBar>
-          <Form name="identificacaoForm">
+          <Form name="identificacaoForm" onSubmit={handleSubmitIdentificacao}>
             <TabPanel value={value} index={0}>
               <DadosBasicosForm data={pessoa} />
             </TabPanel>
@@ -198,6 +202,9 @@ function Identificacao({ protocolo, match }) {
             <TabPanel value={value} index={5}>
               <DatiloscopicaForm />
             </TabPanel>
+            <Button variant="outlined" type="submit" style={{ width: '100px' }}>
+              Salvar
+            </Button>
           </Form>
         </div>
         <Button
