@@ -6,6 +6,16 @@ import { Content } from './styles';
 function DadosBasicosForm({ data }) {
   const [pessoa, setPessoa] = useState({});
 
+  function handleChange(event) {
+    const { name, value } = event.target;
+    const element = [name => value];
+
+    const pess = { ...pessoa, name: value };
+    setPessoa(pess);
+    console.tron.log('name', element);
+    console.tron.log('evento', pess);
+  }
+
   useEffect(() => {
     setPessoa(data);
   }, [data]);
@@ -166,7 +176,8 @@ function DadosBasicosForm({ data }) {
             margin="dense"
             id="dni"
             name="dni"
-            value={pessoa.dni}
+            onChange={handleChange}
+            // value={pessoa.dni}
             InputLabelProps={{
               shrink: !!pessoa.dni,
             }}

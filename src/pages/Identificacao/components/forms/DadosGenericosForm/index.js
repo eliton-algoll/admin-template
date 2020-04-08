@@ -37,12 +37,10 @@ function DadosGenericosForm({ data }) {
 
   useEffect(() => {
     async function loadCidades() {
-      console.tron.log(estadoEleitoral);
       if (estadoEleitoral && estadoEleitoral.codigo) {
         const response = await api.get(
           `/identificacao/findCidadeByPais/0/${estadoEleitoral.codigo}`
         );
-        console.tron.log('cidades', response.data);
 
         setCidades(response.data);
       }

@@ -14,7 +14,6 @@ export default function Cartorio() {
       fetch(url)
         .then(response => response.json())
         .then(result => {
-          console.tron.log(result);
           resolve({
             data: result.data,
             page: result.page - 1,
@@ -22,8 +21,6 @@ export default function Cartorio() {
           });
         });
     });
-
-  console.tron.log(data);
 
   const columns = [
     { title: 'CARTORIO', field: 'nome' },

@@ -21,7 +21,6 @@ export default function Coluna() {
   }, []);
 
   async function detalheColunas(rowData) {
-    // console.tron.log(rowData.codTabela);
     const response = await api.get(`/acl/colunassapi/${rowData.codTabela}`);
 
     setColunas(response.data);

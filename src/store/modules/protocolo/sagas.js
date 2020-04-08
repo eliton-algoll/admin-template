@@ -4,7 +4,11 @@ import history from '~/services/history';
 
 import api from '~/services/api';
 
-import { loadProtocolo, createProtocoloSuccess } from './actions';
+import {
+  loadProtocolo,
+  createProtocoloSuccess,
+  cleanProtocolo,
+} from './actions';
 
 export function* findProtocolo({ payload }) {
   const { codProtocolo } = payload;
@@ -32,7 +36,12 @@ export function* newProtocolo({ payload }) {
   }
 }
 
+export function* clean() {
+  yield put(cleanProtocolo());
+}
+
 export default all([
   takeLatest('@protocolo/PROTOCOLO_REQUEST', findProtocolo),
   takeLatest('@protocolo/CREATE_PROTOCOLO_REQUEST', newProtocolo),
+  takeLatest('@protocolo/CLEAN_PROTOCOLO_REQUEST', clean),
 ]);

@@ -10,7 +10,6 @@ function CaracteristicasForm({ data }) {
   useEffect(() => {
     setPessoa(data);
   }, [data]);
-  console.tron.log(pessoa);
   return (
     <Content>
       <div className="row-1">

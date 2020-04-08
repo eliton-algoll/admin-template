@@ -10,7 +10,6 @@ function DadosDependente({ data }) {
 
   useEffect(() => {
     setDependente(data);
-    console.tron.log(data);
   }, [data]);
 
   return (

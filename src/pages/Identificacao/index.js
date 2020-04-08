@@ -18,7 +18,10 @@ import { useDispatch, connect } from 'react-redux';
 import Layout from '~/template/Layout';
 import history from '~/services/history';
 
-import { protocoloRequest } from '~/store/modules/protocolo/actions';
+import {
+  protocoloRequest,
+  cleanProtocoloRequest,
+} from '~/store/modules/protocolo/actions';
 import { coletaRequest } from '~/store/modules/coleta/actions';
 
 // forms
@@ -48,13 +51,7 @@ function TabPanel(props) {
   );
 }
 
-TabPanel.propTypes = {
-  children: PropTypes.node,
-  index: PropTypes.any.isRequired,
-  value: PropTypes.any.isRequired,
-};
-
-function a11yProps(index) {
+function tabTitleProps(index) {
   return {
     id: `scrollable-force-tab-${index}`,
     'aria-controls': `scrollable-force-tabpanel-${index}`,
@@ -76,6 +73,7 @@ function Identificacao({ protocolo, match }) {
   const [militar, setMilitar] = useState({});
   const [pensionista, setPensionista] = useState({});
   const [dependente, setDependente] = useState({});
+  const [formData, setFormData] = useState({});
 
   // const [caracteristicas, setCaracteristicas] = useState({});
 
@@ -124,8 +122,20 @@ function Identificacao({ protocolo, match }) {
     }
   }, [protocolo]);
 
+  // limpa os dados do protocolo quando o componente é desmontando evitando que seja
+  // renderizado dados errados no formulário
+  useEffect(() => {
+    return () => {
+      dispatch(cleanProtocoloRequest());
+    };
+  }, []);
+
   async function handleSubmitIdentificacao(data) {
     console.tron.log('formulario de identificacao', data);
+  }
+
+  function handleChangeForm(e) {
+    console.tron.log(e);
   }
 
   return (
@@ -152,38 +162,38 @@ function Identificacao({ protocolo, match }) {
               <Tab
                 label="Dados básicos"
                 icon={<PersonOutlineIcon />}
-                {...a11yProps(0)}
+                {...tabTitleProps(0)}
               />
               <Tab
                 label="Dados genéricos"
                 icon={<AssignmentIcon />}
-                {...a11yProps(1)}
+                {...tabTitleProps(1)}
               />
               <Tab
                 label="Certidões"
                 icon={<DescriptionIcon />}
-                {...a11yProps(2)}
+                {...tabTitleProps(2)}
               />
               <Tab
                 label="Características físicas"
                 icon={<PersonPinIcon />}
-                {...a11yProps(3)}
+                {...tabTitleProps(3)}
               />
               <Tab
                 label="Dados Específicos"
                 icon={<LineSyleIcon />}
-                {...a11yProps(4)}
+                {...tabTitleProps(4)}
               />
               <Tab
                 label="Individuais datiloscópica"
                 icon={<FingerPrintIcon />}
-                {...a11yProps(5)}
+                {...tabTitleProps(5)}
               />
             </Tabs>
           </AppBar>
           <Form name="identificacaoForm" onSubmit={handleSubmitIdentificacao}>
             <TabPanel value={value} index={0}>
-              <DadosBasicosForm data={pessoa} />
+              <DadosBasicosForm data={pessoa} change={handleChangeForm} />
             </TabPanel>
             <TabPanel value={value} index={1}>
               <DadosGenericosForm data={{ pessoa, protocolo }} />
@@ -218,6 +228,12 @@ function Identificacao({ protocolo, match }) {
     </Layout>
   );
 }
+
+TabPanel.propTypes = {
+  children: PropTypes.node,
+  index: PropTypes.any.isRequired,
+  value: PropTypes.any.isRequired,
+};
 
 Identificacao.propTypes = {
   protocolo: PropTypes.objectOf,

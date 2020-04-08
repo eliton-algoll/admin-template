@@ -28,6 +28,12 @@ export default function protocolo(state = INITIAL_STATE, action) {
         break;
       }
 
+      case '@protocolo/CLEAN_PROTOCOLO': {
+        console.tron.log('setando null');
+        draft.protocolo = {};
+        break;
+      }
+
       default:
     }
   });

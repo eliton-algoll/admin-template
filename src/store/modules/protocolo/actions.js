@@ -25,3 +25,15 @@ export function createProtocoloSuccess(protocolo) {
     payload: { protocolo },
   };
 }
+
+export function cleanProtocolo() {
+  return {
+    type: '@protocolo/CLEAN_PROTOCOLO',
+  };
+}
+
+export function cleanProtocoloRequest() {
+  return {
+    type: '@protocolo/CLEAN_PROTOCOLO_REQUEST',
+  };
+}

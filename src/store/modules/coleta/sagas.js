@@ -9,23 +9,38 @@ import { loadColeta, loadDigitais } from './actions';
 export function* findColeta({ payload }) {
   const { identidade } = payload;
 
-  const response = yield call(
-    api.get,
-    `/identificacao/buscacoleta/${identidade}`
-  );
+  try {
+    const response = yield call(
+      api.get,
+      `/identificacao/buscacoleta/${identidade}`
+    );
 
-  if (response.data.error) {
-    toast.error(response.data.message, { autoClose: false });
+    if (response.data.error) {
+      toast.error(response.data.message, { autoClose: 8000 });
+    }
+
+    yield put(loadColeta(response.data));
+    try {
+      const coletaRecente = yield call(
+        digitais.get,
+        `WSQPedido/${response.data.codPedido}`
+      );
+
+      yield put(loadDigitais(coletaRecente.data));
+    } catch (err) {
+      console.tron.log(err);
+      toast.error(
+        'Erro ao tentar recuperar as digitais coletadas. Atualize a página',
+        { autoClose: 4000 }
+      );
+    }
+  } catch (err) {
+    console.tron.log(err);
+    toast.error(
+      'Erro ao tentar recuperar as digitais coletadas. Atualize a página',
+      { autoClose: 4000 }
+    );
   }
-
-  yield put(loadColeta(response.data));
-
-  const coletaRecente = yield call(
-    digitais.get,
-    `WSQPedido/${response.data.codPedido}`
-  );
-
-  yield put(loadDigitais(coletaRecente.data));
 }
 
 export default all([takeLatest('@coleta/COLETA_REQUEST', findColeta)]);

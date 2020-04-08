@@ -10,7 +10,6 @@ function DadosPensionista({ data }) {
 
   useEffect(() => {
     setPensao(data);
-    console.tron.log(data);
   }, [data]);
 
   return (

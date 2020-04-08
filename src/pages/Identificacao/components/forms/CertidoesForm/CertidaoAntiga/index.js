@@ -18,8 +18,6 @@ export default function CertidaoAntiga() {
     );
 
     setCidades(response.data);
-
-    console.tron.log(response.data);
   }
 
   async function handleChangeCidade(e) {
