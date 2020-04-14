@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import * as Yup from 'yup';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import AppBar from '@material-ui/core/AppBar';
@@ -22,6 +23,7 @@ import {
   protocoloRequest,
   cleanProtocoloRequest,
 } from '~/store/modules/protocolo/actions';
+
 import { coletaRequest } from '~/store/modules/coleta/actions';
 
 // forms
@@ -33,6 +35,16 @@ import CaracteristicasForm from './components/forms/CaracteristicasForm';
 import DatiloscopicaForm from './components/forms/DatiloscopicaForm';
 
 import { Wrapper, HeaderWraper } from './styles';
+
+// validações
+
+const schemaDadosBasicos = Yup.object().shape({
+  nome: Yup.string().required('A nome é obrigatório'),
+  nomeMae: Yup.string().required('A nome da mãe é obrigatório'),
+  nomePai: Yup.string().required('A nome do pai é obrigatório'),
+  dtNascimento: Yup.string().required('A data de nascimento é obrigatório'),
+  asdasd: Yup.string().required('asdasd é obrigatório'),
+});
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -67,13 +79,13 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function Identificacao({ protocolo, match }) {
+  const formIdtRef = useRef(null);
   const dispatch = useDispatch();
   const [pessoa, setPessoa] = useState({});
   const [tipoPessoa, setTipoPessoa] = useState({});
   const [militar, setMilitar] = useState({});
   const [pensionista, setPensionista] = useState({});
   const [dependente, setDependente] = useState({});
-  const [formData, setFormData] = useState({});
 
   // const [caracteristicas, setCaracteristicas] = useState({});
 
@@ -131,6 +143,25 @@ function Identificacao({ protocolo, match }) {
   }, []);
 
   async function handleSubmitIdentificacao(data) {
+    console.tron.log(data);
+    try {
+      // Remove all previous errors
+      formIdtRef.current.setErrors({});
+
+      await schemaDadosBasicos.validate(data, {
+        abortEarly: false,
+      });
+    } catch (err) {
+      console.tron.log(err);
+      const validationErrors = {};
+      if (err instanceof Yup.ValidationError) {
+        err.inner.forEach(error => {
+          validationErrors[error.path] = error.message;
+        });
+        formIdtRef.current.setErrors(validationErrors);
+      }
+      return;
+    }
     console.tron.log('formulario de identificacao', data);
   }
 
@@ -191,9 +222,13 @@ function Identificacao({ protocolo, match }) {
               />
             </Tabs>
           </AppBar>
-          <Form name="identificacaoForm" onSubmit={handleSubmitIdentificacao}>
+          <Form
+            ref={formIdtRef}
+            name="identificacaoForm"
+            onSubmit={handleSubmitIdentificacao}
+          >
             <TabPanel value={value} index={0}>
-              <DadosBasicosForm data={pessoa} change={handleChangeForm} />
+              <DadosBasicosForm data={pessoa} formRef={formIdtRef} />
             </TabPanel>
             <TabPanel value={value} index={1}>
               <DadosGenericosForm data={{ pessoa, protocolo }} />

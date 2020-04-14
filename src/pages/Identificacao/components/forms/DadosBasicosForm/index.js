@@ -3,21 +3,50 @@ import PropTypes from 'prop-types';
 import { TextField } from 'unform-material-ui';
 import { Content } from './styles';
 
-function DadosBasicosForm({ data }) {
+function DadosBasicosForm({ data, formRef }) {
   const [pessoa, setPessoa] = useState({});
 
   function handleChange(event) {
     const { name, value } = event.target;
-    const element = [name => value];
+    const pess = { ...pessoa, [name]: value };
 
-    const pess = { ...pessoa, name: value };
+    formRef.current.setFieldError(event.currentTarget.name);
+
     setPessoa(pess);
-    console.tron.log('name', element);
-    console.tron.log('evento', pess);
   }
 
   useEffect(() => {
-    setPessoa(data);
+    const {
+      nome,
+      cpf,
+      nomeSocial,
+      nomeMae,
+      nomePai,
+      dtNascimento,
+      dataPrimeiraIdt,
+      estadoCivil,
+      sexo,
+      dni,
+      cnh,
+      pisPasep,
+      idtSitEsp,
+    } = data;
+
+    setPessoa({
+      nome,
+      cpf,
+      nomeSocial,
+      nomeMae,
+      nomePai,
+      dtNascimento,
+      dataPrimeiraIdt,
+      estadoCivil,
+      sexo,
+      dni,
+      cnh,
+      pisPasep,
+      idtSitEsp,
+    });
   }, [data]);
 
   return (
@@ -34,6 +63,7 @@ function DadosBasicosForm({ data }) {
             }}
             id="nome"
             name="nome"
+            onChange={handleChange}
             label="Nome"
             type="text"
             fullWidth
@@ -45,6 +75,7 @@ function DadosBasicosForm({ data }) {
             margin="dense"
             id="nomeSocial"
             name="nomeSocial"
+            onChange={handleChange}
             label="Nome Social"
             value={pessoa.nomeSocial}
             InputLabelProps={{
@@ -61,6 +92,7 @@ function DadosBasicosForm({ data }) {
             margin="dense"
             id="nomeMae"
             name="nomeMae"
+            onChange={handleChange}
             label="Nome Mãe"
             value={pessoa.nomeMae}
             InputLabelProps={{
@@ -75,6 +107,7 @@ function DadosBasicosForm({ data }) {
             variant="outlined"
             margin="dense"
             id="nomePai"
+            onChange={handleChange}
             name="nomePai"
             label="Nome Pai"
             value={pessoa.nomePai}
@@ -91,14 +124,15 @@ function DadosBasicosForm({ data }) {
             autoFocus
             variant="outlined"
             margin="dense"
-            id="nascimento"
-            name="nascimento"
+            id="dtNascimento"
+            name="dtNascimento"
+            onChange={handleChange}
             label="Nascimento"
             value={pessoa.dtNascimento}
             InputLabelProps={{
               shrink: !!pessoa.dtNascimento,
             }}
-            type="text"
+            type="date"
           />
           <TextField
             autoFocus
@@ -106,10 +140,14 @@ function DadosBasicosForm({ data }) {
             margin="dense"
             id="cpf"
             name="cpf"
+            onChange={handleChange}
             label="CPF"
             value={pessoa.cpf}
             InputLabelProps={{
               shrink: !!pessoa.cpf,
+            }}
+            inputProps={{
+              maxLength: 11,
             }}
             type="text"
           />
@@ -117,14 +155,15 @@ function DadosBasicosForm({ data }) {
             autoFocus
             variant="outlined"
             margin="dense"
-            id="dtExpedicao"
-            name="dtExpedicao"
+            id="dataPrimeiraIdt"
+            name="dataPrimeiraIdt"
+            onChange={handleChange}
             value={pessoa.dataPrimeiraIdt}
             InputLabelProps={{
               shrink: !!pessoa.dataPrimeiraIdt,
             }}
             label="Data da 1° Identificação"
-            type="text"
+            type="date"
           />
         </div>
       </div>
@@ -137,6 +176,7 @@ function DadosBasicosForm({ data }) {
             margin="dense"
             id="estadoCivil"
             name="estadoCivil"
+            onChange={handleChange}
             value={pessoa.estadoCivil}
             label="Estado Civil"
             select
@@ -159,6 +199,7 @@ function DadosBasicosForm({ data }) {
             margin="dense"
             id="sexo"
             name="sexo"
+            onChange={handleChange}
             value={pessoa.sexo}
             label="Sexo"
             select
@@ -177,7 +218,6 @@ function DadosBasicosForm({ data }) {
             id="dni"
             name="dni"
             onChange={handleChange}
-            // value={pessoa.dni}
             InputLabelProps={{
               shrink: !!pessoa.dni,
             }}
@@ -190,6 +230,7 @@ function DadosBasicosForm({ data }) {
             margin="dense"
             id="cnh"
             name="cnh"
+            onChange={handleChange}
             value={pessoa.cnh}
             InputLabelProps={{
               shrink: !!pessoa.cnh,
@@ -203,6 +244,7 @@ function DadosBasicosForm({ data }) {
             margin="dense"
             id="pisPasep"
             name="pisPasep"
+            onChange={handleChange}
             label="Pis/Pasep"
             value={pessoa.pisPasep}
             InputLabelProps={{
@@ -216,6 +258,7 @@ function DadosBasicosForm({ data }) {
             margin="dense"
             id="idtSitEsp"
             name="idtSitEsp"
+            onChange={handleChange}
             value={pessoa.idtSitEsp}
             InputLabelProps={{
               shrink: !!pessoa.idtSitEsp,
@@ -243,6 +286,7 @@ function DadosBasicosForm({ data }) {
 
 DadosBasicosForm.propTypes = {
   data: PropTypes.objectOf.isRequired,
+  formRef: PropTypes.objectOf.isRequired,
 };
 
 export default DadosBasicosForm;
