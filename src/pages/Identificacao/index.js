@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
-import * as Yup from 'yup';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import AppBar from '@material-ui/core/AppBar';
@@ -14,7 +13,6 @@ import DescriptionIcon from '@material-ui/icons/Description';
 import LineSyleIcon from '@material-ui/icons/LineStyle';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
-import { Form } from '@unform/web';
 import { useDispatch, connect } from 'react-redux';
 import Layout from '~/template/Layout';
 import history from '~/services/history';
@@ -35,16 +33,6 @@ import CaracteristicasForm from './components/forms/CaracteristicasForm';
 import DatiloscopicaForm from './components/forms/DatiloscopicaForm';
 
 import { Wrapper, HeaderWraper } from './styles';
-
-// validações
-
-const schemaDadosBasicos = Yup.object().shape({
-  nome: Yup.string().required('A nome é obrigatório'),
-  nomeMae: Yup.string().required('A nome da mãe é obrigatório'),
-  nomePai: Yup.string().required('A nome do pai é obrigatório'),
-  dtNascimento: Yup.string().required('A data de nascimento é obrigatório'),
-  asdasd: Yup.string().required('asdasd é obrigatório'),
-});
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -78,8 +66,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function Identificacao({ protocolo, match }) {
-  const formIdtRef = useRef(null);
+function Identificacao({ protocolo, match, tab }) {
   const dispatch = useDispatch();
   const [pessoa, setPessoa] = useState({});
   const [tipoPessoa, setTipoPessoa] = useState({});
@@ -90,11 +77,6 @@ function Identificacao({ protocolo, match }) {
   // const [caracteristicas, setCaracteristicas] = useState({});
 
   const classes = useStyles();
-  const [value, setValue] = React.useState(0);
-
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
 
   function handleBack() {
     history.push('/protocolo');
@@ -142,33 +124,6 @@ function Identificacao({ protocolo, match }) {
     };
   }, []);
 
-  async function handleSubmitIdentificacao(data) {
-    console.tron.log(data);
-    try {
-      // Remove all previous errors
-      formIdtRef.current.setErrors({});
-
-      await schemaDadosBasicos.validate(data, {
-        abortEarly: false,
-      });
-    } catch (err) {
-      console.tron.log(err);
-      const validationErrors = {};
-      if (err instanceof Yup.ValidationError) {
-        err.inner.forEach(error => {
-          validationErrors[error.path] = error.message;
-        });
-        formIdtRef.current.setErrors(validationErrors);
-      }
-      return;
-    }
-    console.tron.log('formulario de identificacao', data);
-  }
-
-  function handleChangeForm(e) {
-    console.tron.log(e);
-  }
-
   return (
     <Layout>
       <Wrapper>
@@ -182,8 +137,7 @@ function Identificacao({ protocolo, match }) {
         <div className={classes.root}>
           <AppBar position="static" color="default">
             <Tabs
-              value={value}
-              onChange={handleChange}
+              value={tab}
               variant="scrollable"
               scrollButtons="off"
               indicatorColor="primary"
@@ -222,43 +176,35 @@ function Identificacao({ protocolo, match }) {
               />
             </Tabs>
           </AppBar>
-          <Form
-            ref={formIdtRef}
-            name="identificacaoForm"
-            onSubmit={handleSubmitIdentificacao}
-          >
-            <TabPanel value={value} index={0}>
-              <DadosBasicosForm data={pessoa} formRef={formIdtRef} />
-            </TabPanel>
-            <TabPanel value={value} index={1}>
-              <DadosGenericosForm data={{ pessoa, protocolo }} />
-            </TabPanel>
-            <TabPanel value={value} index={2}>
-              <CertidoesForm />
-            </TabPanel>
-            <TabPanel value={value} index={3}>
-              <CaracteristicasForm data={pessoa} />
-            </TabPanel>
-            <TabPanel value={value} index={4}>
-              <DadosEspecificosForm
-                data={{ tipoPessoa, militar, pensionista, dependente }}
-              />
-            </TabPanel>
-            <TabPanel value={value} index={5}>
-              <DatiloscopicaForm />
-            </TabPanel>
-            <Button variant="outlined" type="submit" style={{ width: '100px' }}>
-              Salvar
-            </Button>
-          </Form>
+
+          <TabPanel value={tab} index={0}>
+            <DadosBasicosForm data={pessoa} />
+          </TabPanel>
+          <TabPanel value={tab} index={1}>
+            <DadosGenericosForm data={{ pessoa, protocolo }} />
+          </TabPanel>
+          <TabPanel value={tab} index={2}>
+            <CertidoesForm />
+          </TabPanel>
+          <TabPanel value={tab} index={3}>
+            <CaracteristicasForm data={pessoa} />
+          </TabPanel>
+          <TabPanel value={tab} index={4}>
+            <DadosEspecificosForm
+              data={{ tipoPessoa, militar, pensionista, dependente }}
+            />
+          </TabPanel>
+          <TabPanel value={tab} index={5}>
+            <DatiloscopicaForm />
+          </TabPanel>
         </div>
-        <Button
+        {/* <Button
           variant="outlined"
           style={{ width: '100px' }}
           onClick={handleBack}
         >
           Voltar
-        </Button>
+        </Button> */}
       </Wrapper>
     </Layout>
   );
@@ -272,6 +218,7 @@ TabPanel.propTypes = {
 
 Identificacao.propTypes = {
   protocolo: PropTypes.objectOf,
+  tab: PropTypes.number.isRequired,
   match: PropTypes.objectOf.isRequired,
 };
 
@@ -279,6 +226,7 @@ Identificacao.defaultProps = {
   protocolo: {},
 };
 
-export default connect(state => ({ protocolo: state.protocolo.protocolo }))(
-  Identificacao
-);
+export default connect(state => ({
+  protocolo: state.protocolo.protocolo,
+  tab: state.protocolo.tab,
+}))(Identificacao);

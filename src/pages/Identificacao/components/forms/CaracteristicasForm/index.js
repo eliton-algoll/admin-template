@@ -1,178 +1,241 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 import { TextField } from 'unform-material-ui';
 import PropTypes from 'prop-types';
+import * as Yup from 'yup';
+import { useDispatch } from 'react-redux';
+import { Form } from '@unform/web';
+import Button from '@material-ui/core/Button';
+import Icon from '@material-ui/core/Icon';
+import { changeTabs } from '~/store/modules/protocolo/actions';
+
 import { Content } from './styles';
 
+const schema = Yup.object().shape({
+  // pais: Yup.string().required('O país é obrigatório'),
+});
+
 function CaracteristicasForm({ data }) {
+  const formRef = useRef(null);
+  const dispatch = useDispatch();
   const [pessoa, setPessoa] = useState({});
 
   useEffect(() => {
     setPessoa(data);
   }, [data]);
+
+  function handleBack() {
+    dispatch(changeTabs(2));
+  }
+
+  async function handleSubmit(dataForm) {
+    try {
+      // Remove all previous errors
+      formRef.current.setErrors({});
+
+      await schema.validate(dataForm, {
+        abortEarly: false,
+      });
+
+      dispatch(changeTabs(4));
+    } catch (err) {
+      const validationErrors = {};
+      if (err instanceof Yup.ValidationError) {
+        err.inner.forEach(error => {
+          validationErrors[error.path] = error.message;
+        });
+        formRef.current.setErrors(validationErrors);
+      }
+      return;
+    }
+
+    console.tron.log('formulario de identificacao', dataForm);
+  }
+
   return (
     <Content>
-      <div className="row-1">
-        <div className="col-1">
-          <TextField
-            autoFocus
-            variant="outlined"
-            margin="dense"
-            id="cutis"
-            name="cutis"
-            label="Cútis"
-            value={pessoa.cutis}
-            select
-            SelectProps={{ native: true }}
-          >
-            <option value={null}>-- Selecione --</option>
-            <option value="branca">Branca</option>
-            <option value="morena">Morena</option>
-            <option value="parda">Parda</option>
-            <option value="Pd Cl">Parda Clara</option>
-            <option value="Pd Esc">Parda Escura</option>
-            <option value="preta">Preta</option>
-          </TextField>
-
-          <TextField
-            autoFocus
-            variant="outlined"
-            margin="dense"
-            id="olhos"
-            name="olhos"
-            label="Olho"
-            value={pessoa.olhos}
-            select
-            SelectProps={{ native: true }}
-          >
-            <option value={null}>-- Selecione --</option>
-            <option value="azul">Azul</option>
-            <option value="azul Cl">Azul Claro</option>
-            <option value="Cast Cl">Castanho Claro</option>
-            <option value="Cast Esc">Castanho Escuro</option>
-            <option value="Cast Med">Castanho Médio</option>
-            <option value="Esverd">Esverdeado</option>
-            <option value="verde">Verde</option>
-          </TextField>
-
-          <TextField
-            autoFocus
-            variant="outlined"
-            margin="dense"
-            id="cabelo"
-            name="cabelo"
-            label="Cabelos"
-            value={pessoa.cabelo}
-            select
-            SelectProps={{ native: true }}
-          >
-            <option value={null}>-- Selecione --</option>
-            <option value="Alour Carap">Alourado Carapinha</option>
-            <option value="Alour Cresp">Alourado Crespo</option>
-            <option value="Alour Lis">Alourado Liso</option>
-            <option value="Alour Ond">Alourado Ondulado</option>
-            <option value="Averm Carap">Avermelhado Carapinha</option>
-            <option value="Averm Cresp">Avermelhado Crespo</option>
-            <option value="Averm Lis">Avermelhado Liso</option>
-            <option value="Averm Ond">Avermelhado Ondulado</option>
-            <option value="Cast Cl Carap">Castanho Claro Carapinha</option>
-            <option value="Cast Cl Cresp">Castanho Claro Crespo</option>
-            <option value="Cast Cl Lis">Castanho Claro Liso</option>
-            <option value="Cast Cl Ond">Castanho Claro Ondulado</option>
-            <option value="Cast Esc Carap">Castanho Escuro Carapinha</option>
-            <option value="Cast Esc Cresp">Castanho Escuro Crespo</option>
-            <option value="Cast Esc Lis">Castanho Escuro Liso</option>
-            <option value="Cast Esc Ond">Castanho Escuro Ondulado</option>
-            <option value="Cast Med Carap">Castanho Medio Carapinha</option>
-            <option value="Cast Med Cresp">Castanho Medio Crespo</option>
-            <option value="Cast Med Lis">Castanho Medio Liso</option>
-            <option value="Cast Med Ond">Castanho Medio Ondulado</option>
-            <option value="Encanecido Carap">Encanecido Carapinha</option>
-            <option value="Encanecido Cresp">Encanecido Crespo</option>
-            <option value="Encanecido Lis">Encanecido Liso</option>
-            <option value="Encanecido Ond">Encanecido Ondulado</option>
-            <option value="Gris">Grisalho</option>
-            <option value="Lig Gris">Ligeiramente Grisalho</option>
-            <option value="Lour Carap">Louro Carapinha</option>
-            <option value="Lour Cresp">Louro Crespo</option>
-            <option value="Lour Lis">Louro Liso</option>
-            <option value="Lour Ond">Louro Ondulado</option>
-            <option value="Preto Carap">Preto Carapinha</option>
-            <option value="Preto Cresp">Preto Crespo</option>
-            <option value="Preto Lis">Preto Liso</option>
-            <option value="Preto Ond">Preto Ondulado</option>
-            <option value="Ruivo Carap">Ruivo Carapinha</option>
-            <option value="Ruivo Cresp">Ruivo Crespo</option>
-            <option value="Ruivo Lis">Ruivo Liso</option>
-            <option value="Ruivo Ond">Ruivo Ondulado</option>
-            <option value="Tingido">Tingido</option>
-          </TextField>
-
-          {pessoa.sexo === 1 && (
+      <Form ref={formRef} name="identificacaoForm" onSubmit={handleSubmit}>
+        <div className="row-1">
+          <div className="col-1">
             <TextField
               autoFocus
               variant="outlined"
               margin="dense"
-              id="bigode"
-              name="bigode"
-              label="Bigode"
-              value={pessoa.bigode}
+              id="cutis"
+              name="cutis"
+              label="Cútis"
+              value={pessoa.cutis}
               select
               SelectProps={{ native: true }}
             >
               <option value={null}>-- Selecione --</option>
-              <option value="aparado">Aparado</option>
-              <option value="rapado">Rapado</option>
-              <option value="imberbe">Imberbe</option>
+              <option value="branca">Branca</option>
+              <option value="morena">Morena</option>
+              <option value="parda">Parda</option>
+              <option value="Pd Cl">Parda Clara</option>
+              <option value="Pd Esc">Parda Escura</option>
+              <option value="preta">Preta</option>
             </TextField>
-          )}
-          {pessoa.sexo === 1 && (
+
             <TextField
               autoFocus
               variant="outlined"
               margin="dense"
-              id="barba"
-              name="barba"
-              label="Barba"
-              value={pessoa.barba}
+              id="olhos"
+              name="olhos"
+              label="Olho"
+              value={pessoa.olhos}
               select
               SelectProps={{ native: true }}
             >
               <option value={null}>-- Selecione --</option>
-              <option value="C">Com</option>
-              <option value="S">Sem</option>
-              <option value="I">Imberbe</option>
+              <option value="azul">Azul</option>
+              <option value="azul Cl">Azul Claro</option>
+              <option value="Cast Cl">Castanho Claro</option>
+              <option value="Cast Esc">Castanho Escuro</option>
+              <option value="Cast Med">Castanho Médio</option>
+              <option value="Esverd">Esverdeado</option>
+              <option value="verde">Verde</option>
             </TextField>
-          )}
-          <TextField
-            autoFocus
-            variant="outlined"
-            margin="dense"
-            id="cabeca"
-            name="cabeca"
-            label="Anomalia na cabeça"
-            select
-            SelectProps={{ native: true }}
-            value={pessoa.cabeca}
-          >
-            <option value={null}>-- Selecione --</option>
-            <option value="MICROCEFALIA">Microcefalia</option>
-            <option value="MACROCEFALIA">Macrocefalia</option>
-          </TextField>
 
-          <TextField
-            autoFocus
-            variant="outlined"
-            margin="dense"
-            id="sinaisParticulares"
-            name="sinaisParticulares"
-            label="Sinais particulares"
-            value={pessoa.sinaisParticulares}
-            type="text"
-            multiline
-          />
+            <TextField
+              autoFocus
+              variant="outlined"
+              margin="dense"
+              id="cabelo"
+              name="cabelo"
+              label="Cabelos"
+              value={pessoa.cabelo}
+              select
+              SelectProps={{ native: true }}
+            >
+              <option value={null}>-- Selecione --</option>
+              <option value="Alour Carap">Alourado Carapinha</option>
+              <option value="Alour Cresp">Alourado Crespo</option>
+              <option value="Alour Lis">Alourado Liso</option>
+              <option value="Alour Ond">Alourado Ondulado</option>
+              <option value="Averm Carap">Avermelhado Carapinha</option>
+              <option value="Averm Cresp">Avermelhado Crespo</option>
+              <option value="Averm Lis">Avermelhado Liso</option>
+              <option value="Averm Ond">Avermelhado Ondulado</option>
+              <option value="Cast Cl Carap">Castanho Claro Carapinha</option>
+              <option value="Cast Cl Cresp">Castanho Claro Crespo</option>
+              <option value="Cast Cl Lis">Castanho Claro Liso</option>
+              <option value="Cast Cl Ond">Castanho Claro Ondulado</option>
+              <option value="Cast Esc Carap">Castanho Escuro Carapinha</option>
+              <option value="Cast Esc Cresp">Castanho Escuro Crespo</option>
+              <option value="Cast Esc Lis">Castanho Escuro Liso</option>
+              <option value="Cast Esc Ond">Castanho Escuro Ondulado</option>
+              <option value="Cast Med Carap">Castanho Medio Carapinha</option>
+              <option value="Cast Med Cresp">Castanho Medio Crespo</option>
+              <option value="Cast Med Lis">Castanho Medio Liso</option>
+              <option value="Cast Med Ond">Castanho Medio Ondulado</option>
+              <option value="Encanecido Carap">Encanecido Carapinha</option>
+              <option value="Encanecido Cresp">Encanecido Crespo</option>
+              <option value="Encanecido Lis">Encanecido Liso</option>
+              <option value="Encanecido Ond">Encanecido Ondulado</option>
+              <option value="Gris">Grisalho</option>
+              <option value="Lig Gris">Ligeiramente Grisalho</option>
+              <option value="Lour Carap">Louro Carapinha</option>
+              <option value="Lour Cresp">Louro Crespo</option>
+              <option value="Lour Lis">Louro Liso</option>
+              <option value="Lour Ond">Louro Ondulado</option>
+              <option value="Preto Carap">Preto Carapinha</option>
+              <option value="Preto Cresp">Preto Crespo</option>
+              <option value="Preto Lis">Preto Liso</option>
+              <option value="Preto Ond">Preto Ondulado</option>
+              <option value="Ruivo Carap">Ruivo Carapinha</option>
+              <option value="Ruivo Cresp">Ruivo Crespo</option>
+              <option value="Ruivo Lis">Ruivo Liso</option>
+              <option value="Ruivo Ond">Ruivo Ondulado</option>
+              <option value="Tingido">Tingido</option>
+            </TextField>
+
+            {pessoa.sexo === 1 && (
+              <TextField
+                autoFocus
+                variant="outlined"
+                margin="dense"
+                id="bigode"
+                name="bigode"
+                label="Bigode"
+                value={pessoa.bigode}
+                select
+                SelectProps={{ native: true }}
+              >
+                <option value={null}>-- Selecione --</option>
+                <option value="aparado">Aparado</option>
+                <option value="rapado">Rapado</option>
+                <option value="imberbe">Imberbe</option>
+              </TextField>
+            )}
+            {pessoa.sexo === 1 && (
+              <TextField
+                autoFocus
+                variant="outlined"
+                margin="dense"
+                id="barba"
+                name="barba"
+                label="Barba"
+                value={pessoa.barba}
+                select
+                SelectProps={{ native: true }}
+              >
+                <option value={null}>-- Selecione --</option>
+                <option value="C">Com</option>
+                <option value="S">Sem</option>
+                <option value="I">Imberbe</option>
+              </TextField>
+            )}
+            <TextField
+              autoFocus
+              variant="outlined"
+              margin="dense"
+              id="cabeca"
+              name="cabeca"
+              label="Anomalia na cabeça"
+              select
+              SelectProps={{ native: true }}
+              value={pessoa.cabeca}
+            >
+              <option value={null}>-- Selecione --</option>
+              <option value="MICROCEFALIA">Microcefalia</option>
+              <option value="MACROCEFALIA">Macrocefalia</option>
+            </TextField>
+
+            <TextField
+              autoFocus
+              variant="outlined"
+              margin="dense"
+              id="sinaisParticulares"
+              name="sinaisParticulares"
+              label="Sinais particulares"
+              value={pessoa.sinaisParticulares}
+              type="text"
+              multiline
+            />
+          </div>
         </div>
-      </div>
+        <div className="action-button">
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleBack}
+            type="submit"
+            startIcon={<Icon>arrow_left</Icon>}
+          >
+            Retornar
+          </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            type="submit"
+            endIcon={<Icon>arrow_right</Icon>}
+          >
+            Avançar
+          </Button>
+        </div>
+      </Form>
     </Content>
   );
 }

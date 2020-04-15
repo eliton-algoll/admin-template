@@ -3,6 +3,7 @@ import { produce } from 'immer';
 
 const INITIAL_STATE = {
   protocolo: {},
+  tab: 0,
 };
 
 export default function protocolo(state = INITIAL_STATE, action) {
@@ -29,8 +30,12 @@ export default function protocolo(state = INITIAL_STATE, action) {
       }
 
       case '@protocolo/CLEAN_PROTOCOLO': {
-        console.tron.log('setando null');
         draft.protocolo = {};
+        break;
+      }
+
+      case '@protocolo/CHANGE_TAB': {
+        draft.tab = action.payload.tab;
         break;
       }
 

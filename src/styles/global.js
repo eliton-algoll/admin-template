@@ -60,4 +60,15 @@ input[type=number] {
 
 }
 
+.action-button {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding-top: 30px;
+
+    button{
+      margin-right:30px;
+    }
+  }
+
 `;

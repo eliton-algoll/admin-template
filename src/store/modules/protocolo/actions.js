@@ -37,3 +37,10 @@ export function cleanProtocoloRequest() {
     type: '@protocolo/CLEAN_PROTOCOLO_REQUEST',
   };
 }
+
+export function changeTabs(tab) {
+  return {
+    type: '@protocolo/CHANGE_TAB',
+    payload: { tab },
+  };
+}
