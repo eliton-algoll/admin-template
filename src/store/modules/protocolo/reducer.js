@@ -31,6 +31,7 @@ export default function protocolo(state = INITIAL_STATE, action) {
 
       case '@protocolo/CLEAN_PROTOCOLO': {
         draft.protocolo = {};
+        draft.tab = 0;
         break;
       }
 

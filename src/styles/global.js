@@ -71,4 +71,8 @@ input[type=number] {
     }
   }
 
+  input{
+    text-transform: uppercase;
+  }
+
 `;

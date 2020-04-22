@@ -10,6 +10,7 @@ function Table({ data, columns, title, actions, ...rest }) {
       title={title}
       columns={columns}
       data={data}
+      isLoading={rest.loading}
       actions={actions}
       // style={{ overflowX: 'hidden' }}
       options={{

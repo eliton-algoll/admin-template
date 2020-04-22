@@ -7,6 +7,7 @@ import { useDispatch } from 'react-redux';
 import { Form } from '@unform/web';
 import Button from '@material-ui/core/Button';
 import Icon from '@material-ui/core/Icon';
+
 import { changeTabs } from '~/store/modules/protocolo/actions';
 
 import { Content } from './styles';

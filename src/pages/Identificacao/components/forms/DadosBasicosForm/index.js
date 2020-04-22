@@ -183,7 +183,6 @@ function DadosBasicosForm({ data }) {
               margin="dense"
               id="cpf"
               name="cpf"
-              onChange={handleChange}
               label="CPF"
               value={pessoa.cpf}
               InputLabelProps={{

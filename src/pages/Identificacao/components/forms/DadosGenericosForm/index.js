@@ -15,7 +15,9 @@ import { Content } from './styles';
 import api from '~/services/api';
 
 const schema = Yup.object().shape({
-  pais: Yup.string().required('O país é obrigatório'),
+  pais: Yup.number().required('O país é obrigatório'),
+  uf: Yup.number().required('UF é obrigatório'),
+  cidadeCodigoNatural: Yup.string().required('A cidade é obrigatória'),
 });
 
 function DadosGenericosForm({ data }) {
@@ -23,8 +25,7 @@ function DadosGenericosForm({ data }) {
   const dispatch = useDispatch();
   const [paises, setPaises] = useState([]);
   const [protocolo, setProtocolo] = useState({});
-  const [pessoa, setPessoa] = useState({});
-  const [cidadeEleitoral, setCidadeEleitoral] = useState({});
+  const [dadosGenericos, setDadosGenericos] = useState({});
   const [estadoEleitoral, setEstadoEleitoral] = useState({});
   const [cidades, setCidades] = useState([
     { codigo: null, nome: '--Selecione--' },
@@ -41,9 +42,38 @@ function DadosGenericosForm({ data }) {
   }, []);
 
   useEffect(() => {
-    setPessoa(data.pessoa);
-    setCidadeEleitoral(data.protocolo.cidadeEleitoral);
-    setEstadoEleitoral(data.protocolo.cidadeEleitoral.estadoEleitoral);
+    const {
+      sitEstrangeiro,
+      sitEstrPortaria,
+      tipoSangue,
+      fatorRh,
+      docComprovaTipoSanguineo,
+      origemComprovanteTipoSangui,
+      tituloEleitor,
+      secaoTe,
+      zonaTe,
+    } = data.pessoa;
+
+    setDadosGenericos({
+      sitEstrangeiro,
+      sitEstrPortaria,
+      tipoSangue,
+      fatorRh,
+      docComprovaTipoSanguineo,
+      origemComprovanteTipoSangui,
+      tituloEleitor,
+      secaoTe,
+      zonaTe,
+    });
+
+    if (data.protocolo.cidadeEleitoral) {
+      const { codigo: cidadeCodigoEle } = data.protocolo.cidadeEleitoral;
+      const { codigo: ufEle } = data.protocolo.cidadeEleitoral.estadoEleitoral;
+
+      setEstadoEleitoral({ codigo: ufEle });
+      setDadosGenericos({ ...dadosGenericos, cidadeCodigoEle, ufEle });
+    }
+
     setProtocolo(data.protocolo);
   }, [data]);
 
@@ -70,6 +100,15 @@ function DadosGenericosForm({ data }) {
 
   function handleBack() {
     dispatch(changeTabs(0));
+  }
+
+  function handleChange(event) {
+    const { name, value } = event.target;
+    const dados = { ...dadosGenericos, [name]: value };
+
+    formRef.current.setFieldError(event.currentTarget.name);
+
+    setDadosGenericos(dados);
   }
 
   async function handleSubmit(dataForm) {
@@ -141,6 +180,7 @@ function DadosGenericosForm({ data }) {
                 margin="dense"
                 id="pais"
                 name="pais"
+                onChange={handleChange}
                 value={protocolo.pais}
                 label="País"
                 select
@@ -160,6 +200,7 @@ function DadosGenericosForm({ data }) {
                 margin="dense"
                 id="uf"
                 name="uf"
+                onChange={handleChange}
                 value={protocolo.estado}
                 label="Uf"
                 select
@@ -178,6 +219,7 @@ function DadosGenericosForm({ data }) {
                 margin="dense"
                 id="cidadeCodigoNatural"
                 name="cidadeCodigoNatural"
+                onChange={handleChange}
                 label="Cidade"
                 value={protocolo.cidade ? protocolo.cidade.nome : ''}
                 type="text"
@@ -189,8 +231,9 @@ function DadosGenericosForm({ data }) {
                 margin="dense"
                 id="sitEstrangeiro"
                 name="sitEstrangeiro"
+                onChange={handleChange}
                 label="Estrangeiro/Naturalizado"
-                value={pessoa.sitEstrangeiro}
+                value={dadosGenericos.sitEstrangeiro}
                 select
                 SelectProps={{
                   native: true,
@@ -213,7 +256,8 @@ function DadosGenericosForm({ data }) {
                 id="sitEstrPortaria"
                 name="sitEstrPortaria"
                 label="Portaria"
-                value={pessoa.sitEstrPortaria}
+                onChange={handleChange}
+                value={dadosGenericos.sitEstrPortaria}
                 type="text"
               />
             </div>
@@ -226,7 +270,8 @@ function DadosGenericosForm({ data }) {
                 id="tipoSangue"
                 name="tipoSangue"
                 label="Sangue"
-                value={pessoa.tipoSangue}
+                onChange={handleChange}
+                value={dadosGenericos.tipoSangue}
                 select
                 SelectProps={{
                   native: true,
@@ -246,7 +291,8 @@ function DadosGenericosForm({ data }) {
                 id="fatorRh"
                 name="fatorRh"
                 label="Fator RH"
-                value={pessoa.fatorRh}
+                onChange={handleChange}
+                value={dadosGenericos.fatorRh}
                 select
                 SelectProps={{
                   native: true,
@@ -264,7 +310,8 @@ function DadosGenericosForm({ data }) {
                 id="docComprovaTipoSanguineo"
                 name="docComprovaTipoSanguineo"
                 label="Documento"
-                value={pessoa.docComprovaTipoSanguineo}
+                onChange={handleChange}
+                value={dadosGenericos.docComprovaTipoSanguineo}
                 select
                 SelectProps={{
                   native: true,
@@ -285,7 +332,8 @@ function DadosGenericosForm({ data }) {
                 id="origemComprovanteTipoSangui"
                 name="origemComprovanteTipoSangui"
                 label="Comprovante"
-                value={pessoa.origemComprovanteTipoSangui}
+                onChange={handleChange}
+                value={dadosGenericos.origemComprovanteTipoSangui}
                 type="text"
               />
             </div>
@@ -299,7 +347,8 @@ function DadosGenericosForm({ data }) {
                 id="tituloEleitor"
                 name="tituloEleitor"
                 label="Titulo eleitoral"
-                value={pessoa.tituloEleitor}
+                onChange={handleChange}
+                value={dadosGenericos.tituloEleitor}
                 type="text"
               />
 
@@ -310,7 +359,8 @@ function DadosGenericosForm({ data }) {
                 id="secaoTe"
                 name="secaoTe"
                 label="Seção"
-                value={pessoa.secaoTe}
+                onChange={handleChange}
+                value={dadosGenericos.secaoTe}
                 type="text"
               />
               <TextField
@@ -320,7 +370,8 @@ function DadosGenericosForm({ data }) {
                 id="zonaTe"
                 name="zonaTe"
                 label="Zona"
-                value={pessoa.zonaTe}
+                onChange={handleChange}
+                value={dadosGenericos.zonaTe}
                 type="text"
               />
 
@@ -330,7 +381,7 @@ function DadosGenericosForm({ data }) {
                 margin="dense"
                 id="ufEle"
                 name="ufEle"
-                value={estadoEleitoral ? estadoEleitoral.codigo : null}
+                value={dadosGenericos.ufEle ? dadosGenericos.ufEle : null}
                 label="Uf título eleitoral"
                 onChange={handleChangeUf}
                 select
@@ -350,7 +401,11 @@ function DadosGenericosForm({ data }) {
                 id="cidadeCodigoEle"
                 name="cidadeCodigoEle"
                 label="Cidade título eleitoral"
-                value={cidadeEleitoral ? cidadeEleitoral.codigo : null}
+                value={
+                  dadosGenericos.cidadeCodigoEle
+                    ? dadosGenericos.cidadeCodigoEle
+                    : null
+                }
                 select
                 SelectProps={{
                   native: true,

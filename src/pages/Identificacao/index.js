@@ -16,6 +16,7 @@ import Box from '@material-ui/core/Box';
 import { useDispatch, connect } from 'react-redux';
 import Layout from '~/template/Layout';
 import history from '~/services/history';
+import Loading from '~/utils/Loading';
 
 import {
   protocoloRequest,
@@ -73,14 +74,11 @@ function Identificacao({ protocolo, match, tab }) {
   const [militar, setMilitar] = useState({});
   const [pensionista, setPensionista] = useState({});
   const [dependente, setDependente] = useState({});
+  const [loading, setLoading] = useState(true);
 
   // const [caracteristicas, setCaracteristicas] = useState({});
 
   const classes = useStyles();
-
-  function handleBack() {
-    history.push('/protocolo');
-  }
 
   // carregando informações do protocolo
   useEffect(() => {
@@ -113,6 +111,7 @@ function Identificacao({ protocolo, match, tab }) {
         militar: protocolo.militar,
         promocao: protocolo.promocao,
       });
+      setLoading(false);
     }
   }, [protocolo]);
 
@@ -176,7 +175,7 @@ function Identificacao({ protocolo, match, tab }) {
               />
             </Tabs>
           </AppBar>
-
+          {loading && <Loading open={loading} />}
           <TabPanel value={tab} index={0}>
             <DadosBasicosForm data={pessoa} />
           </TabPanel>
@@ -198,13 +197,6 @@ function Identificacao({ protocolo, match, tab }) {
             <DatiloscopicaForm />
           </TabPanel>
         </div>
-        {/* <Button
-          variant="outlined"
-          style={{ width: '100px' }}
-          onClick={handleBack}
-        >
-          Voltar
-        </Button> */}
       </Wrapper>
     </Layout>
   );
@@ -212,8 +204,8 @@ function Identificacao({ protocolo, match, tab }) {
 
 TabPanel.propTypes = {
   children: PropTypes.node,
-  index: PropTypes.any.isRequired,
-  value: PropTypes.any.isRequired,
+  index: PropTypes.number.isRequired,
+  value: PropTypes.string.isRequired,
 };
 
 Identificacao.propTypes = {

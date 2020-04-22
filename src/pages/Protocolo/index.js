@@ -63,6 +63,7 @@ function Protocolo({ user }) {
   const [openVinculados, setOpenVinculados] = useState(false);
   const [basePessoa, setBasePessoa] = useState({});
   const [loading, setLoading] = useState(false);
+  const [loadingProtocolos, setLoadingProtocolos] = useState(true);
   const [listaVinculados, setListaVinculados] = useState([]);
   const formRef = useRef(null);
   const formBuscaRef = useRef(null);
@@ -212,6 +213,7 @@ function Protocolo({ user }) {
       const response = await api.get('/identificacao/protocolo');
 
       setProtocolos(response.data);
+      setLoadingProtocolos(false);
     }
 
     loadProtocolos();
@@ -246,7 +248,29 @@ function Protocolo({ user }) {
     {
       title: 'MOTIVO',
       field: 'motivoIdt',
-      render: rowData => `${rowData.kitBio === '1' ? 'Sim' : 'Não'}`,
+      render: rowData => {
+        switch (rowData.motivoIdt) {
+          case 1:
+            return 'Cadastramento Básico';
+          case 2:
+            return 'Manutenção de Cadastro';
+          case 3:
+            return 'REID - Extravio';
+          case 4:
+            return 'REID - Mudança de Situação';
+          case 5:
+            return 'REID - Promoção';
+          case 6:
+            return 'REID - Sinistro';
+
+          case 7:
+            return 'REID - Término de Validade';
+          case 8:
+            return '2º Via';
+          default:
+            return '';
+        }
+      },
     },
     {
       title: 'STATUS',
@@ -324,7 +348,8 @@ function Protocolo({ user }) {
         data={protocolos}
         columns={columns}
         actions={actions}
-        title="Protocolos cadastrados"
+        loading={loadingProtocolos}
+        title="Protocolos abertos"
       />
 
       <DialogForm
