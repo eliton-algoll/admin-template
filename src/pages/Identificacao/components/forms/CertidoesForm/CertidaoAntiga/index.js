@@ -7,10 +7,16 @@ import Estado from '~/utils/Forms/Estado';
 
 import api from '~/services/api';
 
-export default function CertidaoAntiga() {
+export default function CertidaoAntiga({
+  handleChange,
+  formData,
+  certidao,
+  handleChangeAverbacao,
+  loadDigito,
+  averbacao,
+}) {
   const [cartorios, setCartorios] = useState([]);
   const [cidades, setCidades] = useState([]);
-  const [certidao, setCertidao] = useState('');
 
   async function handleChangeUf(e) {
     const response = await api.get(
@@ -37,6 +43,7 @@ export default function CertidaoAntiga() {
             margin="dense"
             id="dataExp"
             name="dataExp"
+            onChange={handleChange}
             label="Data de Expedição"
             InputLabelProps={{
               shrink: true,
@@ -50,6 +57,7 @@ export default function CertidaoAntiga() {
             margin="dense"
             id="dataRegistro"
             name="dataRegistro"
+            onChange={handleChange}
             label="Data do registro"
             InputLabelProps={{
               shrink: true,
@@ -82,7 +90,8 @@ export default function CertidaoAntiga() {
             autoFocus
             variant="outlined"
             margin="dense"
-            name="cartorioVelho"
+            name="cartorio"
+            onChange={handleChange}
             label="Cartório"
             select
             SelectProps={{
@@ -103,6 +112,7 @@ export default function CertidaoAntiga() {
             margin="dense"
             id="acervo"
             name="acervo"
+            onChange={handleChange}
             label="Acervo"
             select
             SelectProps={{ native: true }}
@@ -118,6 +128,7 @@ export default function CertidaoAntiga() {
             margin="dense"
             id="tipoServico"
             name="tipoServico"
+            onChange={handleChange}
             label="serviço"
             type="text"
             defaultValue="55"
@@ -131,6 +142,7 @@ export default function CertidaoAntiga() {
             margin="dense"
             id="anoRegistro"
             name="anoRegistro"
+            onChange={handleChange}
             label="Ano do Registro"
             type="number"
           />
@@ -140,6 +152,7 @@ export default function CertidaoAntiga() {
             margin="dense"
             id="tipoRegistro"
             name="tipoRegistro"
+            onChange={handleChange}
             label="Tipo de certidão"
             select
             SelectProps={{
@@ -163,6 +176,7 @@ export default function CertidaoAntiga() {
             margin="dense"
             id="nr"
             name="nr"
+            onChange={handleChange}
             label="N° do Livro"
             type="text"
           />
@@ -172,6 +186,7 @@ export default function CertidaoAntiga() {
             margin="dense"
             id="folha"
             name="folha"
+            onChange={handleChange}
             label="Folha"
             type="text"
           />
@@ -181,6 +196,8 @@ export default function CertidaoAntiga() {
             margin="dense"
             id="termo"
             name="termo"
+            onChange={handleChange}
+            onBlur={loadDigito}
             label="N° do registro"
             type="text"
           />
@@ -190,7 +207,11 @@ export default function CertidaoAntiga() {
             margin="dense"
             id="digitoVerificador"
             name="digitoVerificador"
+            value={formData.digito}
             label="Dígito verificador"
+            InputLabelProps={{
+              shrink: true,
+            }}
             type="text"
             inputProps={{ readOnly: true }}
           />
@@ -200,6 +221,7 @@ export default function CertidaoAntiga() {
             margin="dense"
             id="tipoAverbacaoIdt"
             name="tipoAverbacaoIdt"
+            onChange={handleChangeAverbacao}
             label="Averbação"
             select
             SelectProps={{
@@ -219,6 +241,7 @@ export default function CertidaoAntiga() {
             margin="dense"
             id="certidao"
             name="certidao"
+            value={certidao + averbacao}
             label="Certidão por extenso"
             type="text"
             fullWidth

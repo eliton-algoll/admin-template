@@ -215,37 +215,39 @@ function DadosMilitar({ data }) {
               type="text"
             />
           </div>
-          <div style={{ width: '800px' }}>
-            <br />
-            <DialogContentText>
-              Convocação/Prorrogação - Engajamento/Reengajamento
-            </DialogContentText>
-            <TextField
-              autoFocus
-              variant="outlined"
-              margin="dense"
-              id="dtInicio"
-              name="dtInicio"
-              label="Data de início"
-              type="date"
-              InputLabelProps={{
-                shrink: true,
-              }}
-            />
+          {militar.milType === '0' && (
+            <div style={{ width: '800px' }}>
+              <br />
+              <DialogContentText>
+                Convocação/Prorrogação - Engajamento/Reengajamento
+              </DialogContentText>
+              <TextField
+                autoFocus
+                variant="outlined"
+                margin="dense"
+                id="dtInicio"
+                name="dtInicio"
+                label="Data de início"
+                type="date"
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
 
-            <TextField
-              autoFocus
-              variant="outlined"
-              margin="dense"
-              id="dtFim"
-              name="dtFim"
-              label="Data fim"
-              type="date"
-              InputLabelProps={{
-                shrink: true,
-              }}
-            />
-          </div>
+              <TextField
+                autoFocus
+                variant="outlined"
+                margin="dense"
+                id="dtFim"
+                name="dtFim"
+                label="Data fim"
+                type="date"
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
+            </div>
+          )}
           <div style={{ width: '800px' }}>
             <br />
             <DialogContentText> Dados da Carteira </DialogContentText>

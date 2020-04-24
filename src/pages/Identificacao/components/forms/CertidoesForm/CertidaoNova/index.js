@@ -1,9 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { TextField } from 'unform-material-ui';
+
 import { Content } from '../styles';
 
-export default function CertidaoNova() {
+export default function CertidaoNova({
+  handleChange,
+  formData,
+  certidao,
+  handleChangeAverbacao,
+  loadDigito,
+  averbacao,
+}) {
   return (
     <Content>
       <div className="row-1">
@@ -14,8 +22,12 @@ export default function CertidaoNova() {
             margin="dense"
             id="dataExp"
             name="dataExp"
+            onChange={handleChange}
             label="Data de Expedição"
-            type="text"
+            InputLabelProps={{
+              shrink: true,
+            }}
+            type="date"
           />
 
           <TextField
@@ -24,8 +36,12 @@ export default function CertidaoNova() {
             margin="dense"
             id="dataRegistro"
             name="dataRegistro"
+            onChange={handleChange}
             label="Data do registro"
-            type="text"
+            InputLabelProps={{
+              shrink: true,
+            }}
+            type="date"
           />
 
           <TextField
@@ -34,6 +50,7 @@ export default function CertidaoNova() {
             margin="dense"
             id="cartorio"
             name="cartorio"
+            onChange={handleChange}
             label="Cartório"
             type="text"
           />
@@ -44,6 +61,7 @@ export default function CertidaoNova() {
             margin="dense"
             id="acervo"
             name="acervo"
+            onChange={handleChange}
             label="Acervo"
             type="text"
           />
@@ -54,6 +72,7 @@ export default function CertidaoNova() {
             margin="dense"
             id="tipoServico"
             name="tipoServico"
+            onChange={handleChange}
             label="serviço"
             type="text"
             defaultValue="55"
@@ -67,6 +86,7 @@ export default function CertidaoNova() {
             margin="dense"
             id="anoRegistro"
             name="anoRegistro"
+            onChange={handleChange}
             label="Ano do Registro"
             type="number"
           />
@@ -76,6 +96,7 @@ export default function CertidaoNova() {
             margin="dense"
             id="tipoRegistro"
             name="tipoRegistro"
+            onChange={handleChange}
             label="Tipo de Registro"
             type="number"
             inputProps={{
@@ -89,6 +110,7 @@ export default function CertidaoNova() {
             margin="dense"
             id="nr"
             name="nr"
+            onChange={handleChange}
             label="N° do Livro"
             type="text"
           />
@@ -98,6 +120,7 @@ export default function CertidaoNova() {
             margin="dense"
             id="folha"
             name="folha"
+            onChange={handleChange}
             label="Folha"
             type="text"
           />
@@ -107,7 +130,9 @@ export default function CertidaoNova() {
             margin="dense"
             id="termo"
             name="termo"
+            onChange={handleChange}
             label="N° do registro"
+            onBlur={loadDigito}
             type="text"
           />
           <TextField
@@ -116,7 +141,11 @@ export default function CertidaoNova() {
             margin="dense"
             id="digitoVerificador"
             name="digitoVerificador"
+            value={formData.digito}
             label="Dígito verificador"
+            InputLabelProps={{
+              shrink: true,
+            }}
             type="number"
             inputProps={{ readOnly: true }}
           />
@@ -126,8 +155,12 @@ export default function CertidaoNova() {
             margin="dense"
             id="tipoAverbacaoIdt"
             name="tipoAverbacaoIdt"
+            onChange={handleChangeAverbacao}
             label="Averbação"
             select
+            SelectProps={{
+              native: true,
+            }}
           >
             <option value={null}>-- Selecione --</option>
             <option value="1">Divórcio</option>
@@ -142,8 +175,10 @@ export default function CertidaoNova() {
             margin="dense"
             id="certidao"
             name="certidao"
+            onChange={handleChange}
             label="Certidão"
             type="text"
+            value={certidao + averbacao}
             inputProps={{ readOnly: true }}
             fullWidth
           />

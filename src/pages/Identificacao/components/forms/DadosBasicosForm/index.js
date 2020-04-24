@@ -10,6 +10,8 @@ import { Content } from './styles';
 
 import { changeTabs } from '~/store/modules/protocolo/actions';
 
+import api from '~/services/api';
+
 // validações
 
 const schema = Yup.object().shape({
@@ -41,8 +43,6 @@ function DadosBasicosForm({ data }) {
       await schema.validate(dataForm, {
         abortEarly: false,
       });
-
-      dispatch(changeTabs(1));
     } catch (err) {
       const validationErrors = {};
       if (err instanceof Yup.ValidationError) {
@@ -51,10 +51,14 @@ function DadosBasicosForm({ data }) {
         });
         formRef.current.setErrors(validationErrors);
       }
-      return;
     }
 
-    console.tron.log('formulario de identificacao', data);
+    const response = await api.post('/identificacao/identificarapi', dataForm);
+
+    console.tron.log('retornmo da api ', response.data);
+
+    dispatch(changeTabs(1));
+    console.tron.log('formulario de identificacao', dataForm);
   }
 
   useEffect(() => {

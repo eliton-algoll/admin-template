@@ -2,8 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { parseISO, format } from 'date-fns';
 import { connect, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
-
 import pt from 'date-fns/locale/pt';
+
 import { toast } from 'react-toastify';
 import * as Yup from 'yup';
 import history from '~/services/history';
