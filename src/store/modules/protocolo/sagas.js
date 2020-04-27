@@ -10,6 +10,8 @@ import {
   cleanProtocolo,
 } from './actions';
 
+import { cleanColeta } from '../coleta/actions';
+
 export function* findProtocolo({ payload }) {
   const { codProtocolo } = payload;
 
@@ -38,6 +40,7 @@ export function* newProtocolo({ payload }) {
 
 export function* clean() {
   yield put(cleanProtocolo());
+  yield put(cleanColeta());
 }
 
 export default all([

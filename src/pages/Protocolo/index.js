@@ -6,6 +6,7 @@ import pt from 'date-fns/locale/pt';
 
 import { toast } from 'react-toastify';
 import * as Yup from 'yup';
+
 import history from '~/services/history';
 import Layout from '~/template/Layout';
 
@@ -204,13 +205,14 @@ function Protocolo({ user }) {
     handleClose();
   }
 
-  function handleClick(codProtocolo) {
-    history.push(`identificacao/${codProtocolo}`);
+  function handleClick(codProtocolo, local) {
+    history.push(`${local}/${codProtocolo}`);
   }
 
   useEffect(() => {
     async function loadProtocolos() {
       const response = await api.get('/identificacao/protocolo');
+      console.tron.log(response.data);
 
       setProtocolos(response.data);
       setLoadingProtocolos(false);
@@ -331,7 +333,17 @@ function Protocolo({ user }) {
     {
       icon: 'perm_identity',
       tooltip: 'Iniciar Identificação',
-      onClick: (event, rowData) => handleClick(rowData.codProtocolo),
+      onClick: (event, rowData) =>
+        handleClick(rowData.codProtocolo, 'identificacao'),
+    },
+    {
+      icon: 'fingerprint',
+      tooltip: 'Iniciar Dados Biométricos',
+      hidden: rowData =>
+        // rowData.codStatus !== '4';
+        console.tron.log('asdasd', rowData.codStatus),
+      onClick: (event, rowData) =>
+        handleClick(rowData.codProtocolo, 'dadosbiometricos'),
     },
     {
       icon: 'add_box',

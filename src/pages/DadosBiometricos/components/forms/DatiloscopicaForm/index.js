@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import * as Yup from 'yup';
 
 import { Form } from '@unform/web';
+import DigitalIcon from '@material-ui/icons/Fingerprint';
 import Button from '@material-ui/core/Button';
 import Icon from '@material-ui/core/Icon';
 
@@ -14,20 +15,36 @@ import { changeTabs } from '~/store/modules/protocolo/actions';
 import { Content } from './styles';
 
 import imageDefault from '~/assets/images/user.png';
-import digitalDefault from '~/assets/images/loading.gif';
+// import digitalDefault from '~/assets/images/loading.gif';
 import assinaturaDefault from '~/assets/images/assinatura.jpeg';
 
 const schema = Yup.object().shape({
   // pais: Yup.string().required('O país é obrigatório'),
 });
 
-function DatiloscopicaForm({ coleta, digitais }) {
+function DatiloscopicaForm({ coleta, digitais, formula }) {
   const formRef = useRef(null);
   const dispatch = useDispatch();
+  const [formulaDatiloscopica, setFormulaDatiloscopica] = useState('');
 
-  function handleBack() {
-    dispatch(changeTabs(4));
-  }
+  const digitalDefault = (
+    <>
+      <DigitalIcon style={{ fontSize: 120 }} />
+      <span>Carregando Digital...</span>
+    </>
+  );
+
+  const handleChange = event => {
+    const { value } = event.target;
+    const { name } = event.target;
+    setFormulaDatiloscopica({ ...formulaDatiloscopica, [name]: value });
+  };
+
+  useEffect(() => {
+    if (formula) {
+      setFormulaDatiloscopica(formula);
+    }
+  }, [formula]);
 
   async function handleSubmit(dataForm) {
     try {
@@ -66,6 +83,11 @@ function DatiloscopicaForm({ coleta, digitais }) {
                   name="formulaPD"
                   label="Polegar"
                   type="text"
+                  onChange={handleChange}
+                  value={formulaDatiloscopica.formulaPD}
+                  InputLabelProps={{
+                    shrink: !!formulaDatiloscopica.formulaPD,
+                  }}
                 />
                 {digitais[1] ? (
                   <img
@@ -73,7 +95,7 @@ function DatiloscopicaForm({ coleta, digitais }) {
                     alt="polegar Direito"
                   />
                 ) : (
-                  <img src={digitalDefault} alt="polegar Direito" />
+                  digitalDefault
                 )}
               </div>
               <div className="dedo-digital">
@@ -85,6 +107,11 @@ function DatiloscopicaForm({ coleta, digitais }) {
                   name="formulaID"
                   label="Indicador"
                   type="text"
+                  onChange={handleChange}
+                  value={formulaDatiloscopica.formulaID}
+                  InputLabelProps={{
+                    shrink: !!formulaDatiloscopica.formulaID,
+                  }}
                 />
                 {digitais[2] ? (
                   <img
@@ -92,7 +119,7 @@ function DatiloscopicaForm({ coleta, digitais }) {
                     alt="indicador Direito"
                   />
                 ) : (
-                  <img src={digitalDefault} alt="indicador Direito" />
+                  digitalDefault
                 )}
               </div>
               <div className="dedo-digital">
@@ -104,6 +131,11 @@ function DatiloscopicaForm({ coleta, digitais }) {
                   name="formulaMD"
                   label="Médio"
                   type="text"
+                  onChange={handleChange}
+                  value={formulaDatiloscopica.formulaMD}
+                  InputLabelProps={{
+                    shrink: !!formulaDatiloscopica.formulaMD,
+                  }}
                 />
                 {digitais[3] ? (
                   <img
@@ -111,7 +143,7 @@ function DatiloscopicaForm({ coleta, digitais }) {
                     alt="anelar Direito"
                   />
                 ) : (
-                  <img src={digitalDefault} alt="anelar Direito" />
+                  digitalDefault
                 )}
               </div>
               <div className="dedo-digital">
@@ -123,6 +155,11 @@ function DatiloscopicaForm({ coleta, digitais }) {
                   name="formulaAD"
                   label="Anelar"
                   type="text"
+                  onChange={handleChange}
+                  value={formulaDatiloscopica.formulaAD}
+                  InputLabelProps={{
+                    shrink: !!formulaDatiloscopica.formulaAD,
+                  }}
                 />
                 {digitais[4] ? (
                   <img
@@ -130,7 +167,7 @@ function DatiloscopicaForm({ coleta, digitais }) {
                     alt="médio Direito"
                   />
                 ) : (
-                  <img src={digitalDefault} alt="médio Direito" />
+                  digitalDefault
                 )}
               </div>
               <div className="dedo-digital">
@@ -142,6 +179,11 @@ function DatiloscopicaForm({ coleta, digitais }) {
                   name="formulaMID"
                   label="Mínimo"
                   type="text"
+                  onChange={handleChange}
+                  value={formulaDatiloscopica.formulaMID}
+                  InputLabelProps={{
+                    shrink: !!formulaDatiloscopica.formulaMID,
+                  }}
                 />
                 {digitais[5] ? (
                   <img
@@ -149,7 +191,7 @@ function DatiloscopicaForm({ coleta, digitais }) {
                     alt="mínimo Direito"
                   />
                 ) : (
-                  <img src={digitalDefault} alt="mínimo Direito" />
+                  digitalDefault
                 )}
               </div>
             </div>
@@ -164,6 +206,11 @@ function DatiloscopicaForm({ coleta, digitais }) {
                   name="formulaPE"
                   label="Polegar"
                   type="text"
+                  onChange={handleChange}
+                  value={formulaDatiloscopica.formulaPE}
+                  InputLabelProps={{
+                    shrink: !!formulaDatiloscopica.formulaPE,
+                  }}
                 />
                 {digitais[6] ? (
                   <img
@@ -171,7 +218,7 @@ function DatiloscopicaForm({ coleta, digitais }) {
                     alt="polegar esquerdo"
                   />
                 ) : (
-                  <img src={digitalDefault} alt="polegar esquerdo" />
+                  digitalDefault
                 )}
               </div>
               <div className="dedo-digital">
@@ -183,6 +230,11 @@ function DatiloscopicaForm({ coleta, digitais }) {
                   name="formulaIE"
                   label="Indicador"
                   type="text"
+                  onChange={handleChange}
+                  value={formulaDatiloscopica.formulaIE}
+                  InputLabelProps={{
+                    shrink: !!formulaDatiloscopica.formulaIE,
+                  }}
                 />
                 {digitais[7] ? (
                   <img
@@ -190,7 +242,7 @@ function DatiloscopicaForm({ coleta, digitais }) {
                     alt="indicador esquerdo"
                   />
                 ) : (
-                  <img src={digitalDefault} alt="indicador esquerdo" />
+                  digitalDefault
                 )}
               </div>
               <div className="dedo-digital">
@@ -202,6 +254,11 @@ function DatiloscopicaForm({ coleta, digitais }) {
                   name="formulaME"
                   label="Médio"
                   type="text"
+                  onChange={handleChange}
+                  value={formulaDatiloscopica.formulaME}
+                  InputLabelProps={{
+                    shrink: !!formulaDatiloscopica.formulaME,
+                  }}
                 />
                 {digitais[8] ? (
                   <img
@@ -209,7 +266,7 @@ function DatiloscopicaForm({ coleta, digitais }) {
                     alt="anelar esquerdo"
                   />
                 ) : (
-                  <img src={digitalDefault} alt="anelar esquerdo" />
+                  digitalDefault
                 )}
               </div>
               <div className="dedo-digital">
@@ -221,6 +278,11 @@ function DatiloscopicaForm({ coleta, digitais }) {
                   name="formulaAE"
                   label="Anelar"
                   type="text"
+                  onChange={handleChange}
+                  value={formulaDatiloscopica.formulaAE}
+                  InputLabelProps={{
+                    shrink: !!formulaDatiloscopica.formulaAE,
+                  }}
                 />
                 {digitais[9] ? (
                   <img
@@ -228,7 +290,7 @@ function DatiloscopicaForm({ coleta, digitais }) {
                     alt="médio esquerdo"
                   />
                 ) : (
-                  <img src={digitalDefault} alt="médio esquerdo" />
+                  digitalDefault
                 )}
               </div>
               <div className="dedo-digital">
@@ -240,6 +302,11 @@ function DatiloscopicaForm({ coleta, digitais }) {
                   name="formulaMIE"
                   label="Mínimo"
                   type="text"
+                  onChange={handleChange}
+                  value={formulaDatiloscopica.formulaMIE}
+                  InputLabelProps={{
+                    shrink: !!formulaDatiloscopica.formulaMIE,
+                  }}
                 />
                 {digitais[10] ? (
                   <img
@@ -247,7 +314,7 @@ function DatiloscopicaForm({ coleta, digitais }) {
                     alt="mínimo esquerdo"
                   />
                 ) : (
-                  <img src={digitalDefault} alt="mínimo esquerdo" />
+                  digitalDefault
                 )}
               </div>
             </div>
@@ -260,6 +327,11 @@ function DatiloscopicaForm({ coleta, digitais }) {
                 name="formulaPrimaria"
                 label="Fórmula primária"
                 type="text"
+                inputProps={{ readOnly: true }}
+                value={formulaDatiloscopica.formulaPrimaria}
+                InputLabelProps={{
+                  shrink: !!formulaDatiloscopica.formulaPrimaria,
+                }}
               />
             </div>
             <div className="assinatura">
@@ -356,7 +428,7 @@ function DatiloscopicaForm({ coleta, digitais }) {
           <Button
             variant="contained"
             color="primary"
-            onClick={handleBack}
+            // onClick={handleBack}
             startIcon={<Icon>arrow_left</Icon>}
           >
             Retornar
@@ -378,11 +450,13 @@ function DatiloscopicaForm({ coleta, digitais }) {
 DatiloscopicaForm.propTypes = {
   coleta: PropTypes.objectOf,
   digitais: PropTypes.objectOf,
+  formula: PropTypes.objectOf,
 };
 
 DatiloscopicaForm.defaultProps = {
   coleta: {},
   digitais: {},
+  formula: {},
 };
 
 export default connect(state => ({

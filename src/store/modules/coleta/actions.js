@@ -25,3 +25,9 @@ export function coletaNotFound(message) {
     message,
   };
 }
+
+export function cleanColeta() {
+  return {
+    type: '@coleta/CLEAN_COLETA',
+  };
+}

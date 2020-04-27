@@ -1,11 +1,11 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import Button from '@material-ui/core/Button';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import { makeStyles } from '@material-ui/core/styles';
-import FingerPrintIcon from '@material-ui/icons/Fingerprint';
+
 import PersonOutlineIcon from '@material-ui/icons/PersonOutline';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import PersonPinIcon from '@material-ui/icons/PersonPin';
@@ -15,7 +15,6 @@ import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import { useDispatch, connect } from 'react-redux';
 import Layout from '~/template/Layout';
-import history from '~/services/history';
 import Loading from '~/utils/Loading';
 
 import {
@@ -23,15 +22,12 @@ import {
   cleanProtocoloRequest,
 } from '~/store/modules/protocolo/actions';
 
-import { coletaRequest } from '~/store/modules/coleta/actions';
-
 // forms
 import DadosBasicosForm from './components/forms/DadosBasicosForm';
 import DadosGenericosForm from './components/forms/DadosGenericosForm';
 import DadosEspecificosForm from './components/forms/DadosEspecificosForm';
 import CertidoesForm from './components/forms/CertidoesForm';
 import CaracteristicasForm from './components/forms/CaracteristicasForm';
-import DatiloscopicaForm from './components/forms/DatiloscopicaForm';
 
 import { Wrapper, HeaderWraper } from './styles';
 
@@ -89,16 +85,6 @@ function Identificacao({ protocolo, match, tab }) {
 
     loadProtocolo();
   }, []);
-
-  // carregando informações da coleta
-  useEffect(() => {
-    async function loadColeta() {
-      dispatch(coletaRequest(pessoa.idt));
-    }
-    if (pessoa.idt) {
-      loadColeta();
-    }
-  }, [pessoa]);
 
   useEffect(() => {
     if (protocolo.pessoa) {
@@ -168,11 +154,6 @@ function Identificacao({ protocolo, match, tab }) {
                 icon={<LineSyleIcon />}
                 {...tabTitleProps(4)}
               />
-              <Tab
-                label="Individuais datiloscópica"
-                icon={<FingerPrintIcon />}
-                {...tabTitleProps(5)}
-              />
             </Tabs>
           </AppBar>
           {loading && <Loading open={loading} />}
@@ -193,9 +174,6 @@ function Identificacao({ protocolo, match, tab }) {
               data={{ tipoPessoa, militar, pensionista, dependente }}
             />
           </TabPanel>
-          <TabPanel value={tab} index={5}>
-            <DatiloscopicaForm />
-          </TabPanel>
         </div>
       </Wrapper>
     </Layout>
@@ -203,7 +181,7 @@ function Identificacao({ protocolo, match, tab }) {
 }
 
 TabPanel.propTypes = {
-  children: PropTypes.node,
+  children: PropTypes.node.isRequired,
   index: PropTypes.number.isRequired,
   value: PropTypes.string.isRequired,
 };

@@ -11,6 +11,7 @@ import Protocolo from './pages/Protocolo';
 import error404 from './pages/Error/404';
 import Login from './pages/Auth/Login';
 import Identificacao from './pages/Identificacao';
+import DadosBiometricos from './pages/DadosBiometricos';
 import Usuario from './pages/Usuario';
 import Perfil from './pages/Perfil';
 import Cartorio from './pages/Cartorio';
@@ -32,6 +33,10 @@ function Routes({ signed }) {
         <Route path="/usuario" component={Usuario} />
         <Route path="/perfil" component={Perfil} />
         <Route path="/identificacao/:protocolo" component={Identificacao} />
+        <Route
+          path="/dadosbiometricos/:protocolo"
+          component={DadosBiometricos}
+        />
         <Route path="/cartorio" component={Cartorio} />
 
         <Route path="/tabelas" component={Tabela} />

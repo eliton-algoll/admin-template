@@ -30,15 +30,15 @@ export function* findColeta({ payload }) {
     } catch (err) {
       console.tron.log(err);
       toast.error(
-        'Erro ao tentar recuperar as digitais coletadas. Atualize a página',
-        { autoClose: 4000 }
+        'Erro ao tentar recuperar as digitais coletadas. Atualize a página ou se o erro persistir contate o administrador do sistema',
+        { autoClose: 6000 }
       );
     }
   } catch (err) {
     console.tron.log(err);
     toast.error(
-      'Erro ao tentar recuperar as digitais coletadas. Atualize a página',
-      { autoClose: 4000 }
+      'Erro ao tentar recuperar as digitais coletadas. Atualize a página ou se o erro persistir contate o administrador do sistema',
+      { autoClose: 6000 }
     );
   }
 }

@@ -17,6 +17,11 @@ export default function coleta(state = INITIAL_STATE, action) {
         break;
       }
 
+      case '@coleta/CLEAN_COLETA': {
+        draft.coleta = {};
+        break;
+      }
+
       case '@coleta/LOAD_DIGITAIS': {
         draft.digitais = action.payload.digitais;
         break;
